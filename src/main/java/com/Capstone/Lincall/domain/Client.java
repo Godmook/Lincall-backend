@@ -1,9 +1,11 @@
-package com.Capstone.Lincall.dto;
+package com.Capstone.Lincall.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class ClientDto {
+@Setter
+public class Client {
     private String id;
     private String password;
     private String email;
