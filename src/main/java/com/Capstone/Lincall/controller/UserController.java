@@ -25,4 +25,10 @@ public class UserController {
     public String clientSignUp(@RequestBody Client client){
         return userService.clientSignUp(client);
     }
+    @PostMapping("/client/findByID")
+    @ResponseBody
+    public Client clientFind(@RequestBody String id){
+        return userService.clientFindByID(id);
+    }
+
 }
