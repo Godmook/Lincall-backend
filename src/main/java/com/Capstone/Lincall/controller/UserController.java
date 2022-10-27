@@ -2,10 +2,13 @@ package com.Capstone.Lincall.controller;
 
 import com.Capstone.Lincall.domain.Client;
 import com.Capstone.Lincall.service.UserService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -25,17 +28,22 @@ public class UserController {
 
     @PostMapping("/client/signup")
     @ResponseBody
-    public String clientSignUp(@RequestBody Client client){
+    public boolean clientSignUp(@RequestBody Client client){
         return userService.clientSignUp(client);
     }
 
-    // flask 연동 test code
-    @PostMapping("/client/findByID")
+    @PostMapping("/client/logIn")
     @ResponseBody
-    public Client clientFind(@RequestBody String id){
-        return userService.clientFindByID(id);
+    public boolean clientLogIn(@RequestBody LogInModel model){
+        return userService.clientLogIn(model.getId(), model.getPassword());
+    }
+    @Getter
+    static class LogInModel{
+        private String id;
+        private String password;
     }
 
+    // flask 연동 test code
     @PostMapping("/flask-test")
     @ResponseBody
     public String flaskTest(@RequestBody String str){
@@ -54,5 +62,4 @@ public class UserController {
         System.out.println(result.getBody());
         return result.getBody();
     }
-
 }

@@ -4,7 +4,7 @@
 ### DB setting
 * client table
 
-  CREATE OR REPLACE TABLE client (
+  CREATE TABLE client IF NOT EXISTS (
   id VARCHAR(10) NOT NULL,
   password VARCHAR(10) NOT NULL,
   email VARCHAR(20) NOT NULL,
@@ -23,3 +23,13 @@ spring.datasource.url=jdbc:mariadb://localhost:3306/{DB_NAME}
 spring.datasource.username={DB_USERNAME}
 spring.datasource.password={DB_PASSWORD}
 ```
+### API
+| Method | URI                | Description      | input                                                                                | output  |
+|--------|--------------------|------------------|--------------------------------------------------------------------------------------|---------|
+|POST| user/client/signup | client 정보 db에 저장 | {"id" : "user1", "password" : "1234", "email" : "sejong@sju.ac.kr", "name" : "user1"} | boolean |
+|POST| user/client/logIn  | client 로그인 처리| {"id" : "user1", "password" : "1234"}                                                | boolean| 
+|POST| user/flask-test | (http://localhost:5000) 통신 테스트 | String| "hello world!"|
+
+
+### WebSocket 
+* WebSocket 접속 : ws://localHost:8080/signal
