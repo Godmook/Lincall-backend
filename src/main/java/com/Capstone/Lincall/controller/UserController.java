@@ -1,6 +1,8 @@
 package com.Capstone.Lincall.controller;
 
 import com.Capstone.Lincall.domain.Client;
+import com.Capstone.Lincall.domain.Room;
+import com.Capstone.Lincall.service.RoomService;
 import com.Capstone.Lincall.service.UserService;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,16 +16,22 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping(value="/user")
 public class UserController {
 
     UserService userService;
+    RoomService roomService;
 
     @Autowired
-    UserController(UserService userService){
+    UserController(UserService userService, RoomService roomService){
+
         this.userService = userService;
+        this.roomService = roomService;
     }
 
     @PostMapping("/client/signup")
@@ -61,5 +69,12 @@ public class UserController {
         System.out.println(result.getStatusCode());
         System.out.println(result.getBody());
         return result.getBody();
+    }
+
+    // webRTC room 생성 test code
+    @PostMapping("/rooms-test")
+    @ResponseBody
+    public List<String> clientSignUp(){
+        return roomService.getAvailableRooms();
     }
 }

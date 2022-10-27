@@ -24,12 +24,14 @@ spring.datasource.username={DB_USERNAME}
 spring.datasource.password={DB_PASSWORD}
 ```
 ### API
-| Method | URI                | Description      | input                                                                                | output  |
-|--------|--------------------|------------------|--------------------------------------------------------------------------------------|---------|
-|POST| user/client/signup | client 정보 db에 저장 | {"id" : "user1", "password" : "1234", "email" : "sejong@sju.ac.kr", "name" : "user1"} | boolean |
-|POST| user/client/logIn  | client 로그인 처리| {"id" : "user1", "password" : "1234"}                                                | boolean| 
-|POST| user/flask-test | (http://localhost:5000) 통신 테스트 | String| "hello world!"|
+| Method | URI                | Description      | input                                                                                | output          |
+|--------|--------------------|------------------|--------------------------------------------------------------------------------------|-----------------|
+|POST| user/client/signup | client 정보 db에 저장 | {"id" : "user1", "password" : "1234", "email" : "sejong@sju.ac.kr", "name" : "user1"} | boolean         |
+|POST| user/client/logIn  | client 로그인 처리| {"id" : "user1", "password" : "1234"}                                                | boolean         | 
+|POST| user/flask-test | (http://localhost:5000) 통신 테스트 | String| "hello world!"  |
+|POST| user/rooms-test| 현재 join 가능한 상담 방 목록 | | List\<String\> |
 
 
 ### WebSocket 
 * WebSocket 접속 : ws://localHost:8080/signal
+* message 순서 : client [join] -> counselor [join] -> counselor [offer] -> client [answer] -> counselor [ice]] -> client [ice]
