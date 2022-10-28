@@ -4,7 +4,7 @@
 ### DB setting
 * client table
 
-  CREATE TABLE client IF NOT EXISTS (
+  CREATE TABLE IF NOT EXISTS client (
   id VARCHAR(10) NOT NULL,
   password VARCHAR(10) NOT NULL,
   email VARCHAR(20) NOT NULL,
@@ -33,5 +33,5 @@ spring.datasource.password={DB_PASSWORD}
 
 
 ### WebSocket 
-* WebSocket 접속 : ws://localHost:8080/signal
+* WebSocket 접속 : ws://localhost:8080/signal
 * message 순서 : client [join] -> counselor [join] -> counselor [offer] -> client [answer] -> counselor [ice]] -> client [ice]
