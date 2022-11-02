@@ -34,6 +34,12 @@ spring.mail.password={PASSWORD}
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 ```
+ [gmail 앱 비밀번호 설정](https://support.google.com/mail/answer/185833?hl=ko)
+
+### File Directory
+* 상담사 프로필 사진 저장 : ../image/profile/{userID}.png
+
+
 ### API
 | Method | URI                | Description         | input                                                                                 | output          |
 |--------|--------------------|---------------------|---------------------------------------------------------------------------------------|-----------------|
@@ -41,6 +47,7 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 |POST| user/client/logIn  | client 로그인 처리       | {"id" : "user1", "password" : "1234"}                                                 | boolean         |
 |POST| user/rooms-test    | 현재 join 가능한 상담 방 목록 |                                                                                       | List\<String\>  |
 |GET|user/email-auth| 입력한 이메일로 인증 키 전송 | ?email = {사용자 email 주소}| String (인증키)|
+|POST|user/profile| 상담사 프로필 사진 저장 | form-data (userID, image) | none|
 |POST| AI/flask-test      | flask server 통신 테스트 | none                                                                                  | "Hello World!"  |
 |POST| AI/question | 유사 질문 추천 | String (질문) | String (유사한 질문) |
 

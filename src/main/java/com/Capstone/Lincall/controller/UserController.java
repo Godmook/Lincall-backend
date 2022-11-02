@@ -6,8 +6,17 @@ import com.Capstone.Lincall.service.RoomService;
 import com.Capstone.Lincall.service.UserService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -59,5 +68,20 @@ public class UserController {
         // 메일 전송은 비동기 처리
         Future<String> future = emailService.sendEmail(email);
         return future.get();    // 인증 키 반환
+    }
+
+    // 프로필 사진 저장
+    @PostMapping("/profile")
+    @ResponseBody
+    public void saveProfileImage(
+            @RequestPart("id") String userID,
+            @RequestPart("image") MultipartFile image
+    ) throws IOException {
+        String path = new File("../").getAbsolutePath();
+        String filename = path + File.separator + "image"+ File.separator + "profile" + File.separator + userID + ".png";
+
+        Path p = Paths.get(filename);
+        image.transferTo(p);
+
     }
 }
