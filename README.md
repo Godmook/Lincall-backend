@@ -23,6 +23,17 @@ spring.datasource.url=jdbc:mariadb://localhost:3306/{DB_NAME}
 spring.datasource.username={DB_USERNAME}
 spring.datasource.password={DB_PASSWORD}
 ```
+
+* application-email.properties
+
+```properties
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username={ID}
+spring.mail.password={PASSWORD}
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+```
 ### API
 | Method | URI                | Description         | input                                                                                 | output          |
 |--------|--------------------|---------------------|---------------------------------------------------------------------------------------|-----------------|

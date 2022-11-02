@@ -26,8 +26,9 @@ dependencies {
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4.2'
 	implementation group: 'org.json', name: 'json', version: '20220924'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.5'
-
 	implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.23'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.7.5'
+
 
 
 	compileOnly 'org.projectlombok:lombok'

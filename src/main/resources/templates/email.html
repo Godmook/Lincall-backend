@@ -1,0 +1,24 @@
+<pre>
+  <code>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lincall</title>
+</head>
+<body>
+    <p>Lincall</p>
+    <h3>메일인증 안내 드립니다.</h3>
+    <div style='background-color : rgb(240,240,240); padding : 50px'>
+        <p>안녕하세요.<br></p>
+        <p><strong>Lincall</strong>을 이용해 주셔서 진심으로 감사드립니다.<br></p>
+        <p>아래 <strong>인증 키</strong>를 입력하여 회원 가입을 완료해 주세요.<br></p>
+        <div style="text-align : center; background-color : rgb(153,255,255)">
+            <b th:text="${authKey}" style="text-align:center">인증 키</b>
+        </div>
+        <p>감사합니다.<br></p>
+    </div>
+</body>
+</html>
+</code>
+</pre>

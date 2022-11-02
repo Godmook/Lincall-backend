@@ -1,39 +1,55 @@
 package com.Capstone.Lincall.service;
 
-import org.apache.logging.log4j.message.SimpleMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Random;
+import java.util.concurrent.Future;
 
 @Service
 public class EmailService {
-    @Autowired
+
     private JavaMailSender mailSender;
+    private final SpringTemplateEngine templateEngine;
 
+    @Autowired
+    public EmailService(JavaMailSender mailSender, SpringTemplateEngine templateEngine) {
+        this.mailSender = mailSender;
+        this.templateEngine = templateEngine;
+    }
     @Async
-    public String sendEmail(String email){
+    public Future<String> sendEmail(String email) {
         String pwd = makeRandomString();
-        SimpleMailMessage smm = new SimpleMailMessage();
-        smm.setTo(email);
-        smm.setSubject("lincall 인증 메일");
-        smm.setText("Lincall\n" +
-                "메일 인증 안내 입니다 .\n" +
-                "\n" +
-                "안녕하세요.\n" +
-                "Lincall을 이용해 주셔서 진심으로 감사드립니다. \n" +
-                "아래 메일 인증 키를 입력하여 회원가입을 완료해 주세요.\n" +
-                "감사합니다. \n" +
-                "\n" + pwd);
 
-        // mail test code
-        System.out.println(smm);
-        //mailSender.send(smm);
+        try{
+            MimeMessage mimeMailMessage = mailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
+            mimeMessageHelper.setSubject("Lincall 인증 메일");
+            mimeMessageHelper.setTo(email);
 
-        return pwd;
+            Context context = new Context();
+            context.setVariable("authKey", pwd);
+
+            String message = templateEngine.process("email", context);
+            mimeMessageHelper.setText(message, true);
+
+            mailSender.send(mimeMailMessage);
+            return new AsyncResult(pwd);
+        }
+        catch(Exception e){
+            return null;
+        }
+
     }
 
     public String makeRandomString(){

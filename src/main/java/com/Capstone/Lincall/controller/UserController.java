@@ -6,14 +6,11 @@ import com.Capstone.Lincall.service.RoomService;
 import com.Capstone.Lincall.service.UserService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @Controller
 @RequestMapping(value="/user")
@@ -55,10 +52,12 @@ public class UserController {
         return roomService.getAvailableRooms();
     }
 
+    // 메일로 인증 키 전송
     @GetMapping("/email-auth")
     @ResponseBody
-    public String mailCheck(String email){
-        System.out.println("이메일 인증 : " + email);
-        return emailService.sendEmail(email);
+    public String mailCheck(String email) throws ExecutionException, InterruptedException {
+        // 메일 전송은 비동기 처리
+        Future<String> future = emailService.sendEmail(email);
+        return future.get();    // 인증 키 반환
     }
 }
