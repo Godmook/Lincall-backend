@@ -29,6 +29,7 @@ spring.datasource.password={DB_PASSWORD}
 |POST| user/client/signup | client 정보 db에 저장    | {"id" : "user1", "password" : "1234", "email" : "sejong@sju.ac.kr", "name" : "user1"} | boolean         |
 |POST| user/client/logIn  | client 로그인 처리       | {"id" : "user1", "password" : "1234"}                                                 | boolean         |
 |POST| user/rooms-test    | 현재 join 가능한 상담 방 목록 |                                                                                       | List\<String\>  |
+|GET|user/email-auth| 입력한 이메일로 인증 키 전송 | ?email = {사용자 email 주소}| String (인증키)|
 |POST| AI/flask-test      | flask server 통신 테스트 | none                                                                                  | "Hello World!"  |
 |POST| AI/question | 유사 질문 추천 | String (질문) | String (유사한 질문) |
 

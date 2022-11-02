@@ -19,6 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 application-mariaDB.properties
+application-email.properties
 
 .idea
 *.iws

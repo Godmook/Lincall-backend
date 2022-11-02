@@ -1,6 +1,7 @@
 package com.Capstone.Lincall.controller;
 
 import com.Capstone.Lincall.domain.Client;
+import com.Capstone.Lincall.service.EmailService;
 import com.Capstone.Lincall.service.RoomService;
 import com.Capstone.Lincall.service.UserService;
 import lombok.Getter;
@@ -20,12 +21,14 @@ public class UserController {
 
     UserService userService;
     RoomService roomService;
+    EmailService emailService;
 
     @Autowired
-    UserController(UserService userService, RoomService roomService){
+    UserController(UserService userService, RoomService roomService, EmailService emailService){
 
         this.userService = userService;
         this.roomService = roomService;
+        this.emailService = emailService;
     }
 
     @PostMapping("/client/signup")
@@ -50,5 +53,12 @@ public class UserController {
     @ResponseBody
     public List<String> clientSignUp(){
         return roomService.getAvailableRooms();
+    }
+
+    @GetMapping("/email-auth")
+    @ResponseBody
+    public String mailCheck(String email){
+        System.out.println("이메일 인증 : " + email);
+        return emailService.sendEmail(email);
     }
 }
