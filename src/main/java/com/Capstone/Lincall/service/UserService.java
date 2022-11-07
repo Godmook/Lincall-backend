@@ -23,13 +23,15 @@ public class UserService {
         }
     }
 
-    public boolean clientLogIn(String id, String pw){
+    public String clientLogIn(String id, String pw){
         Client client = clientMapper.findByID(id);
-        if(client == null) return false;
-        if(client.getPassword().equals(pw))
-            return true;
-        else
-            return false;
+        if(client == null) return null;
+        return client.getName();
+    }
 
+    public boolean IdAvailable(String id){
+        Client client = clientMapper.findByID(id);
+        if(client == null) return true;
+        else return false;
     }
 }

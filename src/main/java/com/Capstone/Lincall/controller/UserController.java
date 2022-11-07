@@ -23,6 +23,7 @@ import java.util.concurrent.Future;
 
 @Controller
 @RequestMapping(value="/user")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
     UserService userService;
@@ -37,7 +38,7 @@ public class UserController {
         this.emailService = emailService;
     }
 
-    @PostMapping("/client/signup")
+    @PostMapping("/client/signUp")
     @ResponseBody
     public boolean clientSignUp(@RequestBody Client client){
         return userService.clientSignUp(client);
@@ -45,7 +46,7 @@ public class UserController {
 
     @PostMapping("/client/logIn")
     @ResponseBody
-    public boolean clientLogIn(@RequestBody LogInModel model){
+    public String clientLogIn(@RequestBody LogInModel model){
         return userService.clientLogIn(model.getId(), model.getPassword());
     }
     @Getter
@@ -53,6 +54,13 @@ public class UserController {
         private String id;
         private String password;
     }
+
+    @GetMapping("/client/id-check")
+    @ResponseBody
+    public boolean clientIdCheck(String id){
+        return userService.IdAvailable(id);
+    }
+
 
     // webRTC room 생성 test code
     @PostMapping("/rooms-test")
