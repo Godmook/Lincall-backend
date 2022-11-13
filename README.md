@@ -4,7 +4,7 @@
 ### DB setting
 * user table
 
-  CREATE TABLE IF NOT EXISTS user (
+  CREATE TABLE IF NOT EXISTS client (
   id VARCHAR(10) NOT NULL,
   password VARCHAR(10) NOT NULL,
   email VARCHAR(20) NOT NULL,
@@ -24,6 +24,18 @@
   CHECK (email LIKE '%@%')
   );
 
+* consulting
+
+CREATE TABLE IF NOT EXISTS consulting (
+id INT AUTO_INCREMENT,
+counselor VARCHAR(10) NOT NULL,
+client VARCHAR(10) NOT NULL,
+start TIMESTAMP,
+end TIMESTAMP,
+PRIMARY KEY(id),
+FOREIGN KEY (counselor) REFERENCES counselor(id),
+FOREIGN KEY (client) REFERENCES client(id)
+);
 
 ### properties
 * application-mariaDB.properties
@@ -52,6 +64,8 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 
 
 ### API
+* UserController
+
 | Method | URI                   | Description         | input                                                                                      | output          |
 |--------|-----------------------|---------------------|--------------------------------------------------------------------------------------------|-----------------|
 |POST| user/client/signUp    | user 정보 db에 저장    | {"id" : "client1", "password" : "1234", "email" : "client1@sju.ac.kr", "name" : "client1"} | boolean         |
@@ -63,8 +77,21 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 |POST| user/rooms-test       | 현재 join 가능한 상담 방 목록 | none                                                                                       | List\<String\>  |
 |GET| user/email-auth       | 입력한 이메일로 인증 키 전송 | ?email = {사용자 email 주소}                                                                    | String (인증키)    |
 |POST| user/profile          | 상담사 프로필 사진 저장 | form-data (userID, image)                                                                  | none            |
+
+
+* AIController
+
+| Method | URI                   | Description         | input                                                                                      | output          |
+|--------|-----------------------|---------------------|--------------------------------------------------------------------------------------------|-----------------|
 |POST| AI/flask-test         | flask server 통신 테스트 | none                                                                                       | "Hello World!"  |
 |POST| AI/question           | 유사 질문 추천 | String (질문)                                                                                | String (유사한 질문) |
+
+
+* ConsultingController
+
+| Method | URI                   | Description | input                                                                                     | output          |
+|--------|-----------------------|-------------|-------------------------------------------------------------------------------------------|-----------------|
+|POST|consulting/create| 새로운 상담 생성| {"counselor" : "counselor1", "client" : "user1"}|  none |
 
 
 

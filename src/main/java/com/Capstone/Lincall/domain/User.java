@@ -13,7 +13,7 @@ public class User {
 
     @Override
     public String toString(){
-         return "Client { " + "\n" +
+         return "User { " + "\n" +
                 "   id = " + id + ", \n" +
                 "   password = " + password + ", \n" +
                 "   email = " + email + ", \n" +

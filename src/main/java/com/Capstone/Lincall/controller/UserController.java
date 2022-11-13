@@ -27,6 +27,12 @@ public class UserController {
     RoomService roomService;
     EmailService emailService;
 
+    @Getter
+    static class LogInModel{
+        private String id;
+        private String password;
+    }
+
     @Autowired
     UserController(UserService userService, RoomService roomService, EmailService emailService){
 
@@ -35,7 +41,11 @@ public class UserController {
         this.emailService = emailService;
     }
 
-    //////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                             //
+    //                                      /user/client                                           //
+    //                                                                                             //
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 
     @PostMapping("/client/signUp")
     @ResponseBody
@@ -48,11 +58,6 @@ public class UserController {
     public String clientLogIn(@RequestBody LogInModel model){
         return userService.clientLogIn(model.getId(), model.getPassword());
     }
-    @Getter
-    static class LogInModel{
-        private String id;
-        private String password;
-    }
 
     @GetMapping("/client/id-check")
     @ResponseBody
@@ -60,7 +65,11 @@ public class UserController {
         return userService.clientIdAvailable(id);
     }
 
-    ///////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                             //
+    //                                      /user/counselor                                        //
+    //                                                                                             //
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 
     @PostMapping("/counselor/signUp")
     @ResponseBody
@@ -80,7 +89,11 @@ public class UserController {
         return userService.counselorIdAvailable(id);
     }
 
-    ////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                             //
+    //                                            /user                                            //
+    //                                                                                             //
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 
     // webRTC room 생성 test code
     @PostMapping("/rooms-test")
