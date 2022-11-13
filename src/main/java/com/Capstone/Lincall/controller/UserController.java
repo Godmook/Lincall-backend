@@ -1,17 +1,14 @@
 package com.Capstone.Lincall.controller;
 
-import com.Capstone.Lincall.domain.Client;
+import com.Capstone.Lincall.domain.User;
 import com.Capstone.Lincall.service.EmailService;
 import com.Capstone.Lincall.service.RoomService;
 import com.Capstone.Lincall.service.UserService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +20,7 @@ import java.util.concurrent.Future;
 
 @Controller
 @RequestMapping(value="/user")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     UserService userService;
@@ -38,10 +35,12 @@ public class UserController {
         this.emailService = emailService;
     }
 
+    //////////////////////////////////////////////////
+
     @PostMapping("/client/signUp")
     @ResponseBody
-    public boolean clientSignUp(@RequestBody Client client){
-        return userService.clientSignUp(client);
+    public boolean clientSignUp(@RequestBody User user){
+        return userService.clientSignUp(user);
     }
 
     @PostMapping("/client/logIn")
@@ -58,9 +57,30 @@ public class UserController {
     @GetMapping("/client/id-check")
     @ResponseBody
     public boolean clientIdCheck(String id){
-        return userService.IdAvailable(id);
+        return userService.clientIdAvailable(id);
     }
 
+    ///////////////////////////////////////////////
+
+    @PostMapping("/counselor/signUp")
+    @ResponseBody
+    public boolean counselorSignUp(@RequestBody User user){
+        return userService.counselorSignUp(user);
+    }
+
+    @PostMapping("/counselor/logIn")
+    @ResponseBody
+    public String counselorLogIn(@RequestBody LogInModel model){
+        return userService.counselorLogIn(model.getId(), model.getPassword());
+    }
+
+    @GetMapping("/counselor/id-check")
+    @ResponseBody
+    public boolean counselorIdCheck(String id){
+        return userService.counselorIdAvailable(id);
+    }
+
+    ////////////////////////////////////////////////
 
     // webRTC room 생성 test code
     @PostMapping("/rooms-test")
@@ -92,4 +112,5 @@ public class UserController {
         image.transferTo(p);
 
     }
+
 }
