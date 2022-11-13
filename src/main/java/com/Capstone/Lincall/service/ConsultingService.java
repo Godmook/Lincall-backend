@@ -14,7 +14,7 @@ public class ConsultingService {
         this.consultingMapper = consultingMapper;
     }
 
-    public void createConsulting(String counselor, String client){
+    public int createConsulting(String counselor, String client){
         Timestamp start = new Timestamp(System.currentTimeMillis());
         Consulting consulting = new Consulting();
         consulting.setCounselor(counselor);
@@ -22,5 +22,6 @@ public class ConsultingService {
         consulting.setStart(start);
         consulting.setEnd(null);
         consultingMapper.save(consulting);
+        return consulting.getId();
     }
 }

@@ -89,9 +89,9 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 
 * ConsultingController
 
-| Method | URI                   | Description | input                                                                                     | output          |
-|--------|-----------------------|-------------|-------------------------------------------------------------------------------------------|-----------------|
-|POST|consulting/create| 새로운 상담 생성| {"counselor" : "counselor1", "client" : "user1"}|  none |
+| Method | URI                   | Description | input                                                                                     | output              |
+|--------|-----------------------|-------------|-------------------------------------------------------------------------------------------|---------------------|
+|POST|consulting/create| 새로운 상담 생성| {"counselor" : "counselor1", "client" : "user1"}| int (consulting id) |
 
 
 

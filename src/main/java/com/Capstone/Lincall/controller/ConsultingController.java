@@ -23,8 +23,8 @@ public class ConsultingController {
     }
     @PostMapping("/create")
     @ResponseBody
-    public void createNewConsulting(@RequestBody createModel model){
-        consultingService.createConsulting(model.counselor, model.client);
+    public int createNewConsulting(@RequestBody createModel model){
+        return consultingService.createConsulting(model.counselor, model.client);
     }
 
 }
