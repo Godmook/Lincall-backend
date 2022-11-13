@@ -13,6 +13,7 @@
   CHECK (email LIKE '%@%')
   );
 
+
 * counselor table
 
   CREATE TABLE IF NOT EXISTS counselor (
@@ -24,18 +25,21 @@
   CHECK (email LIKE '%@%')
   );
 
+
 * consulting
 
-CREATE TABLE IF NOT EXISTS consulting (
-id INT AUTO_INCREMENT,
-counselor VARCHAR(10) NOT NULL,
-client VARCHAR(10) NOT NULL,
-start TIMESTAMP,
-end TIMESTAMP,
-PRIMARY KEY(id),
-FOREIGN KEY (counselor) REFERENCES counselor(id),
-FOREIGN KEY (client) REFERENCES client(id)
-);
+  CREATE TABLE IF NOT EXISTS consulting (
+  id INT AUTO_INCREMENT,
+  counselor VARCHAR(10) NOT NULL,
+  client VARCHAR(10) NOT NULL,
+  start long,
+  end long,
+  PRIMARY KEY(id),
+  FOREIGN KEY (counselor) REFERENCES counselor(id),
+  FOREIGN KEY (client) REFERENCES client(id)
+  );
+  
+
 
 ### properties
 * application-mariaDB.properties
@@ -91,8 +95,9 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 
 | Method | URI                   | Description | input                                                                                     | output              |
 |--------|-----------------------|-------------|-------------------------------------------------------------------------------------------|---------------------|
-|POST|consulting/create| 새로운 상담 생성| {"counselor" : "counselor1", "client" : "user1"}| int (consulting id) |
-
+| POST   |consulting/create| 새로운 상담 생성| {"counselor" : "counselor1", "client" : "user1"}| int (consulting id) |
+| GET    |consulting/end|상담 종료 시간 업데이트 | ?id={consultingID}|none|
+|GET| consulting/list|고객 상담 내역 | ?clientID = {clientID}| List<ConsultingView> |
 
 
 ### WebSocket 

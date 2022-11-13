@@ -17,6 +17,14 @@ public class UserService {
         this.counselorMapper = counselorMapper;
     }
 
+    public User getClient(String id){
+        return clientMapper.findByID(id);
+    }
+
+    public User getCounselor(String id){
+        return counselorMapper.findByID(id);
+    }
+
     public boolean clientSignUp(User user){
         try{
             clientMapper.save(user);

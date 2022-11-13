@@ -11,8 +11,8 @@ public class Consulting {
     private int id;
     private String counselor;
     private String client;
-    private Timestamp start;
-    private Timestamp end;
+    private long start;
+    private long end;
 
     @Override
     public String toString(){
