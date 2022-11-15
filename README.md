@@ -70,17 +70,17 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 ### API
 * UserController
 
-| Method | URI                   | Description         | input                                                                                      | output          |
-|--------|-----------------------|---------------------|--------------------------------------------------------------------------------------------|-----------------|
-|POST| user/client/signUp    | user 정보 db에 저장    | {"id" : "client1", "password" : "1234", "email" : "client1@sju.ac.kr", "name" : "client1"} | boolean         |
-|POST| user/client/logIn       | user 로그인 처리       | {"id" : "client1", "password" : "1234"}                                                    | boolean         |
-|GET| user/client/id-check    | user id 중복 체크 | ?id = { user id }                                                                          | boolean         | 
-|POST| user/counselor/signUp | counselor 정보 db에 저장    | {"id" : "counselor1", "password" : "1234", "email" : "counselor1@sju.ac.kr", "name" : "counselor1"} | boolean         |
-|POST| user/counselor/logIn       | counselor 로그인 처리       | {"id" : "counselor1", "password" : "1234"}                                                      | boolean         |
-|GET| user/counselor/id-check    | counselor id 중복 체크 | ?id = { user id }                                                                          | boolean         | 
-|POST| user/rooms-test       | 현재 join 가능한 상담 방 목록 | none                                                                                       | List\<String\>  |
-|GET| user/email-auth       | 입력한 이메일로 인증 키 전송 | ?email = {사용자 email 주소}                                                                    | String (인증키)    |
-|POST| user/profile          | 상담사 프로필 사진 저장 | form-data (userID, image)                                                                  | none            |
+| Method | URI                   | Description         | input                                                                                      | output         |
+|--------|-----------------------|---------------------|--------------------------------------------------------------------------------------------|----------------|
+|POST| user/client/signUp    | user 정보 db에 저장    | {"id" : "client1", "password" : "1234", "email" : "client1@sju.ac.kr", "name" : "client1"} | boolean        |
+|POST| user/client/logIn       | user 로그인 처리       | {"id" : "client1", "password" : "1234"}                                                    | User           |
+|GET| user/client/id-check    | user id 중복 체크 | ?id = { user id }                                                                          | boolean        | 
+|POST| user/counselor/signUp | counselor 정보 db에 저장    | {"id" : "counselor1", "password" : "1234", "email" : "counselor1@sju.ac.kr", "name" : "counselor1"} | boolean        |
+|POST| user/counselor/logIn       | counselor 로그인 처리       | {"id" : "counselor1", "password" : "1234"}                                                      | User           |
+|GET| user/counselor/id-check    | counselor id 중복 체크 | ?id = { user id }                                                                          | boolean        | 
+|POST| user/rooms-test       | 현재 join 가능한 상담 방 목록 | none                                                                                       | List\<String\> |
+|GET| user/email-auth       | 입력한 이메일로 인증 키 전송 | ?email = {사용자 email 주소}                                                                    | String (인증키)   |
+|POST| user/profile          | 상담사 프로필 사진 저장 | form-data (userID, image)                                                                  | none           |
 
 
 * AIController

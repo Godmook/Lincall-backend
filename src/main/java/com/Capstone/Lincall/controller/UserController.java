@@ -55,7 +55,7 @@ public class UserController {
 
     @PostMapping("/client/logIn")
     @ResponseBody
-    public String clientLogIn(@RequestBody LogInModel model){
+    public User clientLogIn(@RequestBody LogInModel model){
         return userService.clientLogIn(model.getId(), model.getPassword());
     }
 
@@ -79,7 +79,7 @@ public class UserController {
 
     @PostMapping("/counselor/logIn")
     @ResponseBody
-    public String counselorLogIn(@RequestBody LogInModel model){
+    public User counselorLogIn(@RequestBody LogInModel model){
         return userService.counselorLogIn(model.getId(), model.getPassword());
     }
 

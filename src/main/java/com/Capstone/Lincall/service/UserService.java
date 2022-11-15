@@ -34,11 +34,11 @@ public class UserService {
         }
     }
 
-    public String clientLogIn(String id, String pw){
+    public User clientLogIn(String id, String pw){
         User user = clientMapper.findByID(id);
-        if(user == null) return "존재하지 않는 ID입니다.";
-        if(user.getPassword().equals(pw)) return user.getName();
-        return "비밀번호가 일치하지 않습니다.";
+        if(user == null) return null;
+        if(user.getPassword().equals(pw)) return user;
+        return null;
     }
 
     public boolean clientIdAvailable(String id){
@@ -56,11 +56,11 @@ public class UserService {
         }
     }
 
-    public String counselorLogIn(String id, String pw){
+    public User counselorLogIn(String id, String pw){
         User user = counselorMapper.findByID(id);
-        if(user == null) return "존재하지 않는 ID입니다.";
-        if(user.getPassword().equals(pw)) return user.getName();
-        return "비밀번호가 일치하지 않습니다.";
+        if(user == null) return null;
+        if(user.getPassword().equals(pw)) return user;
+        return null;
     }
 
     public boolean counselorIdAvailable(String id){
