@@ -11,6 +11,9 @@ public interface ConsultingMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int save(Consulting consulting);
 
+    @Update("UPDATE consulting SET counselor = #{counselor}, client = #{client} where id = #{id};")
+    int updateUserInfo(int id, String counselor, String client);
+
     @Update("UPDATE consulting SET end = #{end} WHERE id = #{id};")
     int updateEnd(String id, long end);
 

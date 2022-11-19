@@ -20,6 +20,9 @@ bin/
 ### IntelliJ IDEA ###
 application-mariaDB.properties
 application-email.properties
+vito.properties
+
+VitoService.java
 
 .idea
 *.iws

@@ -6,20 +6,24 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 public class Room {
-    private List<WebSocketSession> list = new ArrayList<>();
-    private String roomId = null;
-    private boolean isProceeding = false;
+    private int roomId;
+    private String client;
+    private String counselor;
+
+    public Room(int roomId, String client, String counselor) {
+        this.roomId = roomId;
+        this.client = client;
+        this.counselor = counselor;
+    }
 
     @Override
-    public String toString(){
-        String str = "{ roomId : "+ roomId +", cadidate : {";
-        for(WebSocketSession sess : list)
-            str += sess.getId() + ", ";
-        str += "}";
-        return str;
+    public boolean equals(Object o){
+        if (((Room)o).getRoomId() == roomId) return true;
+        return false;
     }
 }

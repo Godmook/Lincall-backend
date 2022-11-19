@@ -1,7 +1,9 @@
 package com.Capstone.Lincall.controller;
 
 import com.Capstone.Lincall.domain.ConsultingView;
+import com.Capstone.Lincall.domain.Room;
 import com.Capstone.Lincall.service.ConsultingService;
+import com.Capstone.Lincall.socket.WebSocketMessageController;
 import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +15,11 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ConsultingController {
     ConsultingService consultingService;
+    WebSocketMessageController webSocketMessageController;
 
-    public ConsultingController(ConsultingService consultingService){
+    public ConsultingController(ConsultingService consultingService, WebSocketMessageController webSocketMessageController){
         this.consultingService = consultingService;
+        this.webSocketMessageController = webSocketMessageController;
     }
 
     @Getter
@@ -23,10 +27,13 @@ public class ConsultingController {
         private String counselor;
         private String client;
     }
-    @PostMapping("/create")
+    @GetMapping("/create")
     @ResponseBody
-    public int createNewConsulting(@RequestBody createModel model){
-        return consultingService.createConsulting(model.counselor, model.client);
+    public int createNewConsulting(){
+        int id = consultingService.createConsulting(null, null);
+        webSocketMessageController.roomList.add(new Room(id, null, null));
+        return id;
+
     }
 
     @GetMapping("/end")
@@ -35,10 +42,16 @@ public class ConsultingController {
         consultingService.endConsulting(id);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/records")
     @ResponseBody
-    public List<ConsultingView> getConsultingList(String clientID){
+    public List<ConsultingView> getConsultingRecord(String clientID){
         return consultingService.getConsultingsByClient(clientID);
+    }
+
+    @GetMapping("/room-list")
+    @ResponseBody
+    public List<Room> getRoomList(){
+        return webSocketMessageController.roomList;
     }
 
 }

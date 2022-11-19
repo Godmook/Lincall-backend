@@ -30,16 +30,29 @@
 
   CREATE TABLE IF NOT EXISTS consulting (
   id INT AUTO_INCREMENT,
-  counselor VARCHAR(10) NOT NULL,
-  client VARCHAR(10) NOT NULL,
+  counselor VARCHAR(10),
+  client VARCHAR(10),
   start long,
   end long,
-  PRIMARY KEY(id),
-  FOREIGN KEY (counselor) REFERENCES counselor(id),
-  FOREIGN KEY (client) REFERENCES client(id)
+  PRIMARY KEY(id)
   );
   
 
+* test case
+
+delete from client;
+
+delete from counselor;
+
+delete from consulting;
+
+alter table consulting auto_increment = 1;
+
+insert into client values("client1", "1111", "client1@naver.com", "정현진"), ("client2", "2222", "client2@naver.com", "김예진");
+
+insert into counselor values("counselor1", "1111", "counselor1@naver.com", "오창묵"), ("counselor2", "2222", "counselor2@naver.com", "윤석진");
+
+insert into consulting values("1", "counselor1", "client1", 1668847708518, 1668848008518), ("2", "counselor1", "client2", 1668847908518, 1668848208518), ("3", "counselor2", "client2", 1668847708518, 1668848908518) ;
 
 ### properties
 * application-mariaDB.properties
@@ -63,6 +76,13 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 ```
  [gmail 앱 비밀번호 설정](https://support.google.com/mail/answer/185833?hl=ko)
 
+* vito.properties
+
+```properties
+ClientID = {client id}
+ClientSecret = {client secret}
+```
+
 ### File Directory
 * 상담사 프로필 사진 저장 : ../image/profile/{userID}.png
 
@@ -77,8 +97,7 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 |GET| user/client/id-check    | user id 중복 체크 | ?id = { user id }                                                                          | boolean        | 
 |POST| user/counselor/signUp | counselor 정보 db에 저장    | {"id" : "counselor1", "password" : "1234", "email" : "counselor1@sju.ac.kr", "name" : "counselor1"} | boolean        |
 |POST| user/counselor/logIn       | counselor 로그인 처리       | {"id" : "counselor1", "password" : "1234"}                                                      | User           |
-|GET| user/counselor/id-check    | counselor id 중복 체크 | ?id = { user id }                                                                          | boolean        | 
-|POST| user/rooms-test       | 현재 join 가능한 상담 방 목록 | none                                                                                       | List\<String\> |
+|GET| user/counselor/id-check    | counselor id 중복 체크 | ?id = { user id }                                                                          | boolean        |
 |GET| user/email-auth       | 입력한 이메일로 인증 키 전송 | ?email = {사용자 email 주소}                                                                    | String (인증키)   |
 |POST| user/profile          | 상담사 프로필 사진 저장 | form-data (userID, image)                                                                  | none           |
 
@@ -93,13 +112,39 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 
 * ConsultingController
 
-| Method | URI                   | Description | input                                                                                     | output              |
-|--------|-----------------------|-------------|-------------------------------------------------------------------------------------------|---------------------|
-| POST   |consulting/create| 새로운 상담 생성| {"counselor" : "counselor1", "client" : "user1"}| int (consulting id) |
-| GET    |consulting/end|상담 종료 시간 업데이트 | ?id={consultingID}|none|
-|GET| consulting/list|고객 상담 내역 | ?clientID = {clientID}| List<ConsultingView> |
+| Method | URI                | Description | input                  | output              |
+|--------|--------------------|------------|------------------------|---------------------|
+| GET    | consulting/create  | 새로운 상담 생성  | none| int (consulting id) |
+| GET    | consulting/end     | 상담 종료 시간 업데이트 | ?id={consultingID}     |none|
+| GET    | consulting/records | 고객 상담 기록   | ?clientID = {clientID} | List<ConsultingView> |
+|GET| consulting/room-list | 현재 상담방 리스트 | none|List<Room>|
+
 
 
 ### WebSocket 
-* WebSocket 접속 : ws://localhost:8080/signal
-* message 순서 : user [join] -> counselor [join] -> counselor [offer] -> user [answer] -> counselor [ice]] -> user [ice]
+
+websocket request URL  : ws://localhost:8080/ws
+
+Subscription URL : /sub/room/{room id}
+
+WebSocket Message 형식 : {"type" : "offer", "sender" : "user1", "channelId" : 1 , "data" : "data..."}
+
+* WebSocketMessageController
+
+| Destination Queue | Description | Message                                               | send             |
+|-------------------|------------|-------------------------------------------------------|------------------|
+| /pub/join         | 상담방 입장     | WebsocketMessage (type = "client" or "counselor")     | "{sender} join"  |
+| /pub/data         | 데이터 전송     | WebsocketMessage (type = "offer" or "answer" or "ice") | WebsocketMessage |
+| /pub/sucess       | 상담 시작 | WebsocketMessage (type = "client" or "counselor") | WebsocketMessage |
+
+* 통신 순서
+1. http://localhost//consulting/create로 상담방 생성 요청 (client)
+2. client - websocket 연결 + /sub/room/{roomID} 구독
+3. client - /pub/join 발행
+4. counselor - websocket 연결 + /sub/room/{roomID} 구독
+5. counselor - /pub/join 발행
+6. client - /pub/data로 offer 발행
+7. counselor - /pub/data로 answer 발행
+8. client - /pub/data로 ice 발행
+9. counselor - /pub/data로 ice 발행
+10. client/counselor - /pub/sucess 발행

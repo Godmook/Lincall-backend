@@ -2,7 +2,6 @@ package com.Capstone.Lincall.controller;
 
 import com.Capstone.Lincall.domain.User;
 import com.Capstone.Lincall.service.EmailService;
-import com.Capstone.Lincall.service.RoomService;
 import com.Capstone.Lincall.service.UserService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import java.util.concurrent.Future;
 public class UserController {
 
     UserService userService;
-    RoomService roomService;
     EmailService emailService;
 
     @Getter
@@ -34,10 +32,9 @@ public class UserController {
     }
 
     @Autowired
-    UserController(UserService userService, RoomService roomService, EmailService emailService){
+    UserController(UserService userService, EmailService emailService){
 
         this.userService = userService;
-        this.roomService = roomService;
         this.emailService = emailService;
     }
 
@@ -95,12 +92,6 @@ public class UserController {
     //                                                                                             //
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // webRTC room 생성 test code
-    @PostMapping("/rooms-test")
-    @ResponseBody
-    public List<String> clientSignUp(){
-        return roomService.getAvailableRooms();
-    }
 
     // 메일로 인증 키 전송
     @GetMapping("/email-auth")

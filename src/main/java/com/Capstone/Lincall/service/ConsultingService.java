@@ -5,6 +5,7 @@ import com.Capstone.Lincall.domain.ConsultingView;
 import com.Capstone.Lincall.mapper.ConsultingMapper;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -32,6 +33,10 @@ public class ConsultingService {
         consulting.setEnd(start);
         consultingMapper.save(consulting);
         return consulting.getId();
+    }
+
+    public int updateConsultingUser(int id, String counselor, String client){
+        return consultingMapper.updateUserInfo(id,counselor, client);
     }
 
     public void endConsulting(String consultingID){
