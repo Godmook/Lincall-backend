@@ -138,7 +138,7 @@ WebSocket Message 형식 : {"type" : "offer", "sender" : "user1", "channelId" : 
 | /pub/sucess       | 상담 시작 | WebsocketMessage (type = "client" or "counselor") | WebsocketMessage |
 
 * 통신 순서
-1. http://localhost//consulting/create로 상담방 생성 요청 (client)
+1. http://localhost:8080/consulting/create로 상담방 생성 요청 (client)
 2. client - websocket 연결 + /sub/room/{roomID} 구독
 3. client - /pub/join 발행
 4. counselor - websocket 연결 + /sub/room/{roomID} 구독
