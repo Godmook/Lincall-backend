@@ -14,10 +14,15 @@ public interface ConsultingMapper {
     @Update("UPDATE consulting SET counselor = #{counselor}, client = #{client} where id = #{id};")
     int updateUserInfo(int id, String counselor, String client);
 
+    @Update("UPDATE consulting SET start = #{start} WHERE id = #{id};")
+    int updateStart(String id, long start);
+
     @Update("UPDATE consulting SET end = #{end} WHERE id = #{id};")
     int updateEnd(String id, long end);
 
     @Select("select * from consulting where client = #{id} ORDER BY start desc;")
     List<Consulting> getByClient(String id);
 
+    @Delete("DELETE FROM consulting WHERE id = #{id};")
+    int removeConsulting(String id);
 }

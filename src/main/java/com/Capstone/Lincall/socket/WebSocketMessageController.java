@@ -1,21 +1,12 @@
 package com.Capstone.Lincall.socket;
 
-import com.Capstone.Lincall.controller.ConsultingController;
-import com.Capstone.Lincall.domain.ConsultingView;
 import com.Capstone.Lincall.domain.Room;
-import com.Capstone.Lincall.domain.WebSocketMessage;
 import com.Capstone.Lincall.service.ConsultingService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +14,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class WebSocketMessageController {
-    public List<Room> roomList =new ArrayList<>();
+    public List<Room> roomList =new ArrayList<>();     // 고객 대기 방
     private final SimpMessageSendingOperations simpMessageSendingOperations;
     @Autowired private ConsultingService consultingService;
 
@@ -44,6 +35,11 @@ public class WebSocketMessageController {
         }
 
         if(message.getType().equals("counselor")){
+            // 이미 매칭된 counselor 존재
+            if(r.getCounselor() != null){
+                simpMessageSendingOperations.convertAndSend("/sub/room/" + message.getChannelId(), "이미 상담사가 매칭된 방입니다.");
+                return;
+            }
             // counselor join
             r.setCounselor(message.getSender());
             consultingService.updateConsultingUser(r.getRoomId(), r.getCounselor(), r.getClient());
@@ -53,7 +49,7 @@ public class WebSocketMessageController {
         }
 
         // roomId 채널을 구독 중인 사람에게 join 발생 알림
-        simpMessageSendingOperations.convertAndSend("/sub/room/" + message.getChannelId(), message.getSender() + "join");
+        simpMessageSendingOperations.convertAndSend("/sub/room/" + message.getChannelId(), message.getSender() + " join");
     }
 
     @MessageMapping("/data")
@@ -63,12 +59,27 @@ public class WebSocketMessageController {
     }
 
     @MessageMapping("/success")
-    public void connectinSuccess(WebSocketMessage message){
+    public void connectionSuccess(WebSocketMessage message){
         Room r = findRoomById(message.getChannelId());
         if(r != null) roomList.remove(r);
+
+        // 상담 시작 시간 업데이트
+        consultingService.startConsulting(String.valueOf(message.getChannelId()));
+
         // roomId 채널을 구독 중인 사람에게 전달
         simpMessageSendingOperations.convertAndSend("/sub/room/" + message.getChannelId(), message);
     }
 
+    @MessageMapping("/quit")
+    public void quit(WebSocketMessage message){
+        Room r = findRoomById(message.getChannelId());
+        if(r != null) roomList.remove(r);
+
+        // 상담 기록 db에서 삭제
+        consultingService.deleteConsulting(String.valueOf(message.getChannelId()));
+
+        // roomId 채널을 구독 중인 사람에게 전달
+        simpMessageSendingOperations.convertAndSend("/sub/room/" + message.getSender() + " quit");
+    }
 
 }

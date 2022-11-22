@@ -132,10 +132,11 @@ WebSocket Message 형식 : {"type" : "offer", "sender" : "user1", "channelId" : 
 * WebSocketMessageController
 
 | Destination Queue | Description | Message                                               | send             |
-|-------------------|------------|-------------------------------------------------------|------------------|
-| /pub/join         | 상담방 입장     | WebsocketMessage (type = "client" or "counselor")     | "{sender} join"  |
-| /pub/data         | 데이터 전송     | WebsocketMessage (type = "offer" or "answer" or "ice") | WebsocketMessage |
-| /pub/sucess       | 상담 시작 | WebsocketMessage (type = "client" or "counselor") | WebsocketMessage |
+|-------------------|-------------|-------------------------------------------------------|------------------|
+| /pub/join         | 상담방 입장      | WebsocketMessage (type = "client" or "counselor")     | "{sender} join"  |
+| /pub/data         | 데이터 전송      | WebsocketMessage (type = "offer" or "answer" or "ice") | WebsocketMessage |
+| /pub/sucess       | 상담 시작       | WebsocketMessage (type = "client" or "counselor") | WebsocketMessage |
+| /pub/quit         | 상담방 나가기     | WebsocketMessage (type = "client" or "counselor") | "{sender} quit"  |
 
 * 통신 순서
 1. http://localhost:8080/consulting/create로 상담방 생성 요청 (client)

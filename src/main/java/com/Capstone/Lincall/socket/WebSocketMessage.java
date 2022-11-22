@@ -1,4 +1,4 @@
-package com.Capstone.Lincall.domain;
+package com.Capstone.Lincall.socket;
 
 import lombok.Getter;
 
@@ -7,5 +7,5 @@ public class WebSocketMessage {
     private String type;
     private String sender;
     private int channelId;
-    private String data;
+    private Object data;
 }

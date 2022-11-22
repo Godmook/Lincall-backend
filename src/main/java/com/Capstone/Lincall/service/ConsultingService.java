@@ -44,6 +44,15 @@ public class ConsultingService {
         consultingMapper.updateEnd(consultingID, end);
     }
 
+    public void startConsulting(String consultingID){
+        long start = System.currentTimeMillis();
+        consultingMapper.updateStart(consultingID, start);
+    }
+
+    public void deleteConsulting(String consultingID){
+        consultingMapper.removeConsulting(consultingID);
+    }
+
     public List<ConsultingView> getConsultingsByClient(String client){
         List<Consulting> consultings = consultingMapper.getByClient(client);
         List<ConsultingView> consultingViews = new ArrayList<>();
