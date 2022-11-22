@@ -2,6 +2,7 @@ package com.Capstone.Lincall.socket;
 
 import com.Capstone.Lincall.domain.Room;
 import com.Capstone.Lincall.service.ConsultingService;
+import com.Capstone.Lincall.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,6 +18,7 @@ public class WebSocketMessageController {
     public List<Room> roomList =new ArrayList<>();     // 고객 대기 방
     private final SimpMessageSendingOperations simpMessageSendingOperations;
     @Autowired private ConsultingService consultingService;
+    @Autowired private UserService userService;
 
     public Room findRoomById(int id){
         for(Room r : roomList)
@@ -42,10 +44,13 @@ public class WebSocketMessageController {
             }
             // counselor join
             r.setCounselor(message.getSender());
+            r.setCounselorName(userService.getCounselor(message.getSender()).getName());
             consultingService.updateConsultingUser(r.getRoomId(), r.getCounselor(), r.getClient());
         }else{
             // client join - room create
             r.setClient(message.getSender());
+            r.setClientName(userService.getClient(message.getSender()).getName());
+            r.setCreateTime(System.currentTimeMillis());
         }
 
         // roomId 채널을 구독 중인 사람에게 join 발생 알림

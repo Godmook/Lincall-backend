@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -51,6 +52,7 @@ public class ConsultingController {
     @GetMapping("/room-list")
     @ResponseBody
     public List<Room> getRoomList(){
+        Collections.sort(webSocketMessageController.roomList);
         return webSocketMessageController.roomList;
     }
 
