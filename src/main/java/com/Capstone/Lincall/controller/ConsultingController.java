@@ -44,10 +44,16 @@ public class ConsultingController {
         consultingService.endConsulting(id);
     }
 
-    @GetMapping("/records")
+    @GetMapping("/records/client")
     @ResponseBody
-    public List<ConsultingView> getConsultingRecord(String clientID){
+    public List<ConsultingView> getClientConsultingRecord(String clientID){
         return consultingService.getConsultingsByClient(clientID);
+    }
+
+    @GetMapping("/records/counselor")
+    @ResponseBody
+    public List<ConsultingView> getCounselorConsultingRecord(String id){
+        return consultingService.getConsultingsByCounselor(id);
     }
 
     @GetMapping("/room-list")
@@ -61,6 +67,18 @@ public class ConsultingController {
     @ResponseBody
     public String getCounselorInfo(String id){
         return consultingService.getCounselorInfo(id);
+    }
+
+    @GetMapping("/counselorInfo/today")
+    @ResponseBody
+    public String getCounselorInfoToday(String id){
+        return consultingService.getCounselorInfoToday(id);
+    }
+
+    @GetMapping("/waitClient")
+    @ResponseBody
+    public int getCountOfWaitClient(){
+        return webSocketMessageController.roomList.size();
     }
 
 }

@@ -55,13 +55,35 @@ public class ConsultingService {
         consultingMapper.removeConsulting(consultingID);
     }
 
-    public List<ConsultingView> getConsultingsByClient(String client){
-        List<Consulting> consultings = consultingMapper.getByClient(client);
+    public List<ConsultingView> getConsultingsByClient(String id){
+        List<Consulting> consultings = consultingMapper.getByClient(id);
         List<ConsultingView> consultingViews = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         for(Consulting c : consultings){
-            String counselor_name = userService.getCounselor(c.getCounselor()).getName();
-            String client_name = userService.getClient(c.getClient()).getName();
+            User counselor = userService.getCounselor(c.getCounselor());
+            User client = userService.getClient(c.getClient());
+            if(counselor == null || client == null) continue;
+            String counselor_name = counselor.getName();
+            String client_name = client.getName();
+            Date start = new Date(c.getStart());
+            Date end = new Date(c.getEnd());
+            long diff = c.getEnd() - c.getStart();
+            String time = String.format("%02d:%02d:%02d",(diff/(1000 * 60 * 60)) % 24, (diff/(1000 * 60)) % 60, (diff/ 1000) % 60);
+            consultingViews.add(new ConsultingView(c.getId(), counselor_name, client_name,sdf.format(start), sdf.format(end), time));
+        }
+        return consultingViews;
+    }
+
+    public List<ConsultingView> getConsultingsByCounselor(String id){
+        List<Consulting> consultings = consultingMapper.getByCounselor(id);
+        List<ConsultingView> consultingViews = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        for(Consulting c : consultings){
+            User counselor = userService.getCounselor(c.getCounselor());
+            User client = userService.getClient(c.getClient());
+            if(counselor == null || client == null) continue;
+            String counselor_name = counselor.getName();
+            String client_name = client.getName();
             Date start = new Date(c.getStart());
             Date end = new Date(c.getEnd());
             long diff = c.getEnd() - c.getStart();
@@ -79,6 +101,19 @@ public class ConsultingService {
 
         long dayT = consultingMapper.getSumOfConsultingTimeDay(id);
         obj.put("today", dayT);
+
+        return obj.toString();
+    }
+
+    public String getCounselorInfoToday(String id)
+    {
+        JSONObject obj = new JSONObject();
+
+        int count = consultingMapper.getCountOfConsultingToday(id);
+        obj.put("count", count);
+
+        long dayT = consultingMapper.getSumOfConsultingTimeDay(id);
+        obj.put("time", dayT);
 
         return obj.toString();
     }
