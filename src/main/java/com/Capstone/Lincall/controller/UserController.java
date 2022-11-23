@@ -86,6 +86,24 @@ public class UserController {
         return userService.counselorIdAvailable(id);
     }
 
+    @Getter
+    static class UpdatePasswordModel{
+        String id;
+        String curPassword;
+        String newPassword;
+    }
+    @PostMapping("/counselor/updatePassword")
+    @ResponseBody
+    public String counselorUpdatePassword(@RequestBody UpdatePasswordModel model){
+        return userService.counselorUpdatePassword(model.id, model.curPassword, model.newPassword);
+    }
+
+    @GetMapping("/counselor/withdrawal")
+    @ResponseBody
+    public void counselorWithdrawal(@RequestParam String id){
+        userService.counselorRemove(id);
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                             //
     //                                            /user                                            //

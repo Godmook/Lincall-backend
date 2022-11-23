@@ -23,6 +23,12 @@ public interface ConsultingMapper {
     @Select("select * from consulting where client = #{id} ORDER BY start desc;")
     List<Consulting> getByClient(String id);
 
+    @Select("SELECT IFNULL(SUM(end-start), 0) AS time FROM consulting WHERE counselor = #{counselor} AND date_format(from_unixtime(1668847708518/1000), '%Y-%c') = date_format(now(), '%Y-%c');")
+    int getSumOfConsultingTimeMonth(String counselor);
+
+    @Select("SELECT IFNULL(SUM(end-start), 0) AS time FROM consulting WHERE counselor = 'counselor1' AND date_format(from_unixtime(1668847708518/1000), '%Y-%c-%e') = date_format(now(), '%Y-%c-%e');")
+    int getSumOfConsultingTimeDay(String counselor);
+
     @Delete("DELETE FROM consulting WHERE id = #{id};")
     int removeConsulting(String id);
 }

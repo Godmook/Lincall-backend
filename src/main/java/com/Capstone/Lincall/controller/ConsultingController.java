@@ -5,6 +5,7 @@ import com.Capstone.Lincall.domain.Room;
 import com.Capstone.Lincall.service.ConsultingService;
 import com.Capstone.Lincall.socket.WebSocketMessageController;
 import lombok.Getter;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +55,12 @@ public class ConsultingController {
     public List<Room> getRoomList(){
         Collections.sort(webSocketMessageController.roomList);
         return webSocketMessageController.roomList;
+    }
+
+    @GetMapping("/counselorInfo")
+    @ResponseBody
+    public String getCounselorInfo(String id){
+        return consultingService.getCounselorInfo(id);
     }
 
 }

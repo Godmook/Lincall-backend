@@ -68,4 +68,20 @@ public class UserService {
         if(user == null) return true; // 사용 가능
         else return false;  // 사용 불가
     }
+
+    public String counselorUpdatePassword(String id, String cPassword, String nPassword){
+        User user = counselorMapper.findByID(id);
+        if(user == null) return "존재하지 않는 회원입니다.";
+
+        if(user.getPassword().equals(cPassword)){
+            counselorMapper.updatePassword(id, nPassword);
+            return "비밀번호를 변경하였습니다.";
+        }
+        else
+            return "현재 비밀번호가 일치하지 않습니다.";
+    }
+
+    public void counselorRemove(String id){
+        counselorMapper.remove(id);
+    }
 }
