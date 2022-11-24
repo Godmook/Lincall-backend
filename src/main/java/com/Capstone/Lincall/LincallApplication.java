@@ -20,6 +20,10 @@ public class LincallApplication {
 		if(!file.exists())
 			file.mkdir();
 
+		file = new File("../voice");
+		if(!file.exists())
+			file.mkdir();
+
 		SpringApplication.run(LincallApplication.class, args);
 	}
 
