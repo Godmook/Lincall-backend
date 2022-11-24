@@ -1,5 +1,6 @@
 package com.Capstone.Lincall.service;
 
+import com.Capstone.Lincall.domain.Message;
 import com.Capstone.Lincall.mapper.MessageMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class MainService {
@@ -50,16 +52,26 @@ public class MainService {
         // keyword (감정 변화가 생긴 경우)
         String keyword = null;  //test
 
+        // 질문 추천
+        String question = null; //test
+        String answer = null;
+
         // 추가할 text 생성
         JSONObject nText = new JSONObject();
         nText.put("type", userType);
         nText.put("message", message);
         nText.put("time", time);
         nText.put("emotion", emotion);
+        nText.put("question", question);
+        nText.put("answer", answer);
 
         // db update
-        messageMapper.updateDialogue(roomId, userType, time, emotion, message, keyword);
+        messageMapper.insertMessage(roomId, userType, time, emotion, message, keyword);
 
         return nText.toString();
+    }
+
+    public List<Message> getDialogue(int roomId){
+        return messageMapper.getByRoomId(roomId);
     }
 }

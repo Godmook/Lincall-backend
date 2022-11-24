@@ -103,7 +103,10 @@ ClientSecret = {client secret}
 ```
 
 ### File Directory
+
 * 상담사 프로필 사진 저장 : ../image/profile/{userID}.png
+* 고객 음성 저장 파일 : ../voice/room0_client.wav
+* 상담사 음성 저장 파일 : ../voice/room0_counselor.wav
 
 
 ### API
@@ -143,6 +146,14 @@ ClientSecret = {client secret}
 |GET| consulting/counselorInfo        | 상담사 상담 정보(이번달, 오늘 총 상담 시간) | ?id={counselorID}      | String({"month" : 00, "today" : 00}) |
 |GET| consulting//counselorInfo/today | 상담사 상담 정보(오늘 상담 건수, 오늘 상담 시간) | ?id={counselorID}      | String({"count":12,"time":3960000})  |
 |GET| consulting/waitClient           | 현재 대기 중인 고객 수 | none                   | int                                  |
+
+
+* MainController
+
+| Method | URI                             | Description | input                                                                                            | output                                                              |
+|--------|---------------------------------|------------|--------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
+|POST| main/addText| 상담 중 대화 저장| {"roomId" : 1,"from" : "client" or "counselor", "time" : 1669302000,"encodeStr" : "encode .wav"} | JSON String (emotion, angry, time, type, message, question, answer) |
+|GET|main/dialogue| 상담 대화 기록 확인 | ?roomId= {consulting id} | List\<Message\>                                                     |
 
 
 ### WebSocket 
