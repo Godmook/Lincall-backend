@@ -155,19 +155,19 @@ ClientSecret = {client secret}
 
 * MainController
 
-| Method | URI                             | Description | input                                                                                            | output                                                              |
-|--------|---------------------------------|------------|--------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
-|POST| main/addText| 상담 중 대화 저장| {"roomId" : 1,"from" : "client" or "counselor", "time" : 1669302000,"encodeStr" : "encode .wav"} | JSON String (emotion, angry, time, type, message, question, answer) |
-|GET|main/dialogue| 상담 대화 기록 확인 | ?roomId= {consulting id} | List\<Message\>                                                     |
+| Method | URI                             | Description | input                                                                                            | output          |
+|--------|---------------------------------|------------|--------------------------------------------------------------------------------------------------|-----------------|
+|POST| main/addText| 상담 중 대화 저장| {"roomId" : 1,"from" : "client" or "counselor", "time" : 1669302000,"encodeStr" : "encode .wav"} | none            |
+|GET|main/dialogue| 상담 대화 기록 확인 | ?roomId= {consulting id} | List\<Message\> |
 
 
 ### WebSocket 
 
-websocket request URL  : ws://localhost:8080/ws
-
-Subscription URL : /sub/room/{room id}
-
-WebSocket Message 형식 : {"type" : "offer", "sender" : "user1", "channelId" : 1 , "data" : "data..."}
+  websocket request URL  : ws://localhost:8080/ws
+  
+  Subscription URL : /sub/room/{room id}
+  
+  WebSocket Message 형식 : {"type" : "offer", "sender" : "user1", "channelId" : 1 , "data" : "data..."}
 
 * WebSocketMessageController
 
@@ -178,14 +178,23 @@ WebSocket Message 형식 : {"type" : "offer", "sender" : "user1", "channelId" : 
 | /pub/sucess       | 상담 시작       | WebsocketMessage (type = "client" or "counselor") | WebsocketMessage |
 | /pub/quit         | 상담방 나가기     | WebsocketMessage (type = "client" or "counselor") | "{sender} quit"  |
 
+
+* Websocket message
+
+  - "reload anger starting point" : 고객이 화를 내기 시작한 경우 반환.
+  
+  - "activate voice blocking" : 고객이 화를 4번 낸 경우 음성 차단 기능 활성화 알림.
+
+
+
 * 통신 순서
-1. http://localhost:8080/consulting/create로 상담방 생성 요청 (client)
-2. client - websocket 연결 + /sub/room/{roomID} 구독
-3. client - /pub/join 발행
-4. counselor - websocket 연결 + /sub/room/{roomID} 구독
-5. counselor - /pub/join 발행
-6. client - /pub/data로 offer 발행
-7. counselor - /pub/data로 answer 발행
-8. client - /pub/data로 ice 발행
-9. counselor - /pub/data로 ice 발행
-10. client/counselor - /pub/sucess 발행
+  1. http://localhost:8080/consulting/create로 상담방 생성 요청 (client)
+  2. client - websocket 연결 + /sub/room/{roomID} 구독
+  3. client - /pub/join 발행
+  4. counselor - websocket 연결 + /sub/room/{roomID} 구독
+  5. counselor - /pub/join 발행
+  6. client - /pub/data로 offer 발행
+  7. counselor - /pub/data로 answer 발행
+  8. client - /pub/data로 ice 발행
+  9. counselor - /pub/data로 ice 발행
+  10. client/counselor - /pub/sucess 발행

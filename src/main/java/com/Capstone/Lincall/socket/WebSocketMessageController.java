@@ -4,6 +4,7 @@ import com.Capstone.Lincall.domain.Room;
 import com.Capstone.Lincall.service.ConsultingService;
 import com.Capstone.Lincall.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.jsse.JSSEImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -84,7 +85,11 @@ public class WebSocketMessageController {
         consultingService.deleteConsulting(String.valueOf(message.getChannelId()));
 
         // roomId 채널을 구독 중인 사람에게 전달
-        simpMessageSendingOperations.convertAndSend("/sub/room/" + message.getSender() + " quit");
+        simpMessageSendingOperations.convertAndSend("/sub/room/" + message.getChannelId() ,message.getSender() + " quit");
+    }
+
+    public void sendMessage(int roomId, String message){
+        simpMessageSendingOperations.convertAndSend("/sub/room/" + roomId, message);
     }
 
 }
