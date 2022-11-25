@@ -17,9 +17,13 @@ import java.util.*;
 
 @Service
 public class VitoService {
-    static String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjkzMTMxNjYsImlhdCI6MTY2OTI5MTU2NiwianRpIjoiUThRM2VvUEZqaGVzb1pjYVJGOEkiLCJwbGFuIjoiYmFzaWMiLCJzY29wZSI6InNwZWVjaCIsInN1YiI6InROVHpQTGhyZmVLWTZ5WXFESUl5In0.rM1px1xKu0c1T0mi2jCeLzon92Pn4mWusNJD5ciX-58";
+    String token;
 
-    public static void getToken() throws IOException {
+    public VitoService() throws IOException {
+        token = getToken();
+    }
+
+    public String getToken() throws IOException {
         ResourceBundle rb = ResourceBundle.getBundle("vito", Locale.KOREA);
         String clientId = rb.getString("ClientID");
         String clientSecret = rb.getString("ClientSecret");
@@ -46,10 +50,12 @@ public class VitoService {
         String response = s.hasNext() ? s.next() : "";
         s.close();
         token = response;
-        System.out.println(response);
+
+        JSONObject obj = new JSONObject(response);
+        return obj.getString("access_token");
     }
 
-    public static String requestTranscribe(String filePath) throws Exception {
+    public String requestTranscribe(String filePath) throws Exception {
         URL url = new URL("https://openapi.vito.ai/v1/transcribe");
         HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
         httpConn.setRequestMethod("POST");
@@ -110,7 +116,7 @@ public class VitoService {
         return obj.getString("id");
     }
 
-    public static String getTranscribe(String id) throws Exception {
+    public String getTranscribe(String id) throws Exception {
         URL url = new URL("https://openapi.vito.ai/v1/transcribe/"+ id);
         HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
         httpConn.setRequestMethod("GET");
@@ -124,66 +130,5 @@ public class VitoService {
         String response = s.hasNext() ? s.next() : "";
         s.close();
         return response;
-    }
-
-    public static void main(String[] args) throws Exception {
-        //getToken();
-        //requestTranscribe("test.wav");
-        //getTranscribe("lZwH9xrYRbOePSXGX5zAlg");
-
-/*
-        // test code (rec1~rec5 stt test)
-        for(int i=0; i<5;i++){
-            id.add(requestTranscribe(files[i]));
-        }
-
-        for(int i=0; i<5; i++){
-            String transcribeID = id.poll();
-            String str;
-            JSONObject obj;
-
-            // colplete 대기
-            while(true){
-                str = getTranscribe(transcribeID);
-                obj = new JSONObject(str);
-                String status = obj.getString("status");
-                if(status.equals("completed"))
-                    break;
-            }
-
-            JSONArray arr = obj.getJSONObject("results").getJSONArray("utterances");
-            for(int j=0; j<arr.length(); j++){
-                JSONObject text = arr.getJSONObject(j);
-                String message = text.getString("msg");
-                System.out.println(message);
-            }
-            System.out.println("---------------------------------------------------");
-        }
-
- */
-        String input = Files.readString(Paths.get("D:\\Capstone\\voice\\64.txt"));
-        byte[] decodeBytes = Base64.decodeBase64(input);
-        Path filePath = Paths.get("D:\\Capstone\\voice\\room5\\client.wav");
-        String id = requestTranscribe("room5\\client.wav");
-
-
-        String str;
-        JSONObject obj;
-        // colplete 대기
-        while(true){
-            str = getTranscribe(id);
-            obj = new JSONObject(str);
-            String status = obj.getString("status");
-            if(status.equals("completed"))
-                break;
-        }
-
-        JSONArray arr = obj.getJSONObject("results").getJSONArray("utterances");
-        for(int j=0; j<arr.length(); j++){
-            JSONObject text = arr.getJSONObject(j);
-            String message = text.getString("msg");
-            System.out.println(message);
-        }
-
     }
 }

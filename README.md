@@ -2,7 +2,11 @@
 2022-2 capstone design 'Lincall'
 
 ### DB setting
-* user table
+* database create
+  create database lincall character set "utf8" collate 'utf8_icelandic_ci';
+  use lincall;
+
+* client table
 
   CREATE TABLE IF NOT EXISTS client (
   id VARCHAR(10) NOT NULL,
@@ -40,38 +44,39 @@
  
 * Message
 
-CREATE TABLE IF NOT EXISTS Message(
-id INT AUTO_INCREMENT,
-roomId INT NOT NULL,
-type VARCHAR(20),
-time long,
-emotion VARCHAR(20),
-text VARCHAR(100),
-keyword VARCHAR(100),
-PRIMARY KEY(id)
-);
+  CREATE TABLE IF NOT EXISTS Message(
+  id INT AUTO_INCREMENT,
+  roomId INT NOT NULL,
+  type VARCHAR(20),
+  time long,
+  emotion VARCHAR(20),
+  text VARCHAR(100),
+  keyword VARCHAR(100),
+  PRIMARY KEY(id)
+  );
+
 
 * test case
 
-delete from client;
-
-delete from counselor;
-
-delete from consulting;
-
-delete from message;
-
-alter table consulting auto_increment = 1;
-
-alter table message auto_increment = 1;
-
-insert into client values("client1", "1111", "client1@naver.com", "정현진"), ("client2", "2222", "client2@naver.com", "김예진");
-
-insert into counselor values("counselor1", "1111", "counselor1@naver.com", "오창묵"), ("counselor2", "2222", "counselor2@naver.com", "윤석진");
-
-insert into consulting values("1", "counselor1", "client1", 1668847708518, 1668848008518, null), ("2", "counselor1", "client2", 1668847908518, 1668848208518, null), ("3", "counselor2", "client2", 1668847708518, 1668848908518, null) ;
-
-insert into message values("1", "1",  "client", 1669302000, "angry", "주문하고 한시간 지났는데 안와요.", "주문"), ("2", "1", "counselor", 1669602000, "none", "배달 출발했습니다.", null), ("3", "1", "notice", 1669702000, "none", "지금부터 고객 음성이 차단됩니다.", null);
+  delete from client;
+  
+  delete from counselor;
+  
+  delete from consulting;
+  
+  delete from message;
+  
+  alter table consulting auto_increment = 1;
+  
+  alter table message auto_increment = 1;
+  
+  insert into client values("client1", "1111", "client1@naver.com", "정현진"), ("client2", "2222", "client2@naver.com", "김예진");
+  
+  insert into counselor values("counselor1", "1111", "counselor1@naver.com", "오창묵"), ("counselor2", "2222", "counselor2@naver.com", "윤석진");
+  
+  insert into consulting values("1", "counselor1", "client1", 1668847708518, 1668848008518, null), ("2", "counselor1", "client2", 1668847908518, 1668848208518, null), ("3", "counselor2", "client2", 1668847708518, 1668848908518, null) ;
+  
+  insert into message values("1", "1",  "client", 1669302000, "angry", "주문하고 한시간 지났는데 안와요.", "주문"), ("2", "1", "counselor", 1669602000, "none", "배달 출발했습니다.", null), ("3", "1", "notice", 1669702000, "none", "지금부터 고객 음성이 차단됩니다.", null);
 
 ### properties
 * application-mariaDB.properties
