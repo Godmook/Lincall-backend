@@ -155,10 +155,11 @@ ClientSecret = {client secret}
 
 * MainController
 
-| Method | URI                             | Description | input                                                                                            | output          |
-|--------|---------------------------------|------------|--------------------------------------------------------------------------------------------------|-----------------|
-|POST| main/addText| 상담 중 대화 저장| {"roomId" : 1,"from" : "client" or "counselor", "time" : 1669302000,"encodeStr" : "encode .wav"} | none            |
-|GET|main/dialogue| 상담 대화 기록 확인 | ?roomId= {consulting id} | List\<Message\> |
+| Method | URI             | Description              | input                                                                                            | output             |
+|--------|-----------------|--------------------------|--------------------------------------------------------------------------------------------------|--------------------|
+|POST| main/addText    | 상담 중 대화 저장               | {"roomId" : 1,"from" : "client" or "counselor", "time" : 1669302000,"encodeStr" : "encode .wav"} | none               |
+|GET| main/dialogue   | 상담 대화 기록 확인              | ?roomId= {consulting id} | List\<Message\>    |
+|GET| main/angerPoint | 고객이 화내기 시작한 부분의 대화 기록 확인 | ?roomId= {consulting id} | List\<AngerPoint\> |
 
 
 ### WebSocket 

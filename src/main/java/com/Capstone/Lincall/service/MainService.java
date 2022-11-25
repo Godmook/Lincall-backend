@@ -1,5 +1,6 @@
 package com.Capstone.Lincall.service;
 
+import com.Capstone.Lincall.domain.AngerPoint;
 import com.Capstone.Lincall.domain.Message;
 import com.Capstone.Lincall.mapper.MessageMapper;
 import com.Capstone.Lincall.socket.WebSocketMessageController;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -96,6 +98,10 @@ public class MainService {
 
     public List<Message> getDialogue(int roomId) {
         return messageMapper.getByRoomId(roomId);
+    }
+
+    public List<AngerPoint> getAngerPoints(int roomId){
+        return messageMapper.getAngerStartMessage(roomId);
     }
 
 }

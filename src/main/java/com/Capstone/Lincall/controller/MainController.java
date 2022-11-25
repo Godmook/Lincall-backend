@@ -1,9 +1,11 @@
 package com.Capstone.Lincall.controller;
 
+import com.Capstone.Lincall.domain.AngerPoint;
 import com.Capstone.Lincall.domain.Message;
 import com.Capstone.Lincall.service.MainService;
 import com.Capstone.Lincall.socket.WebSocketMessageController;
 import lombok.Getter;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
@@ -34,5 +36,11 @@ public class MainController {
     @ResponseBody
     public void getDialogue(int roomId){
         mainService.getDialogue(roomId);
+    }
+
+    @GetMapping("/angerPoint")
+    @ResponseBody
+    public List<AngerPoint> getAngerPoints(int roomId){
+        return mainService.getAngerPoints(roomId);
     }
 }

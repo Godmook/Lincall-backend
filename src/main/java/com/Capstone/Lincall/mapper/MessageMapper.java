@@ -1,10 +1,12 @@
 package com.Capstone.Lincall.mapper;
 
+import com.Capstone.Lincall.domain.AngerPoint;
 import com.Capstone.Lincall.domain.Message;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -21,4 +23,7 @@ public interface MessageMapper {
 
     @Select("SELECT COUNT(*) FROM message WHERE roomID = #{roomId} AND emotion = 'angry';")
     public int getAngerCnt(int roomId);
+
+    @Select("SELECT text, time, keyword FROM message WHERE roomId = #{roomId} AND keyword IS NOT NULL;")
+    public List<AngerPoint> getAngerStartMessage(int roomId);
 }
