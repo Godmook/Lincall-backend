@@ -26,4 +26,10 @@ public interface MessageMapper {
 
     @Select("SELECT text, time, keyword FROM message WHERE roomId = #{roomId} AND keyword IS NOT NULL;")
     public List<AngerPoint> getAngerStartMessage(int roomId);
+
+    @Select("SELECT GROUP_CONCAT(text)  FROM message WHERE date_format(from_unixtime(time/1000), '%Y-%c-%e') = date_format(now(), '%Y-%c-%e') AND emotion = 'happy';")
+    public String getTodayHappyMessage();
+
+    @Select("SELECT GROUP_CONCAT(text)  FROM message WHERE date_format(from_unixtime(time/1000), '%Y-%c-%e') = date_format(now(), '%Y-%c-%e') AND emotion = 'angry';")
+    public String getTodayAngryMessage();
 }

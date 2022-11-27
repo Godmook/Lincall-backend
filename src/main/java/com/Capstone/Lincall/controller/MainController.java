@@ -43,4 +43,16 @@ public class MainController {
     public List<AngerPoint> getAngerPoints(int roomId){
         return mainService.getAngerPoints(roomId);
     }
+
+    @GetMapping("/todayKeyword/happy")
+    @ResponseBody
+    public List<String> getTodayHappyKeyword(){
+        return mainService.getTodayHappyKeyword();
+    }
+
+    @GetMapping("/todayKeyword/angry")
+    @ResponseBody
+    public List<String> getTodayAngryKeyword(){
+        return mainService.getTodayAngryKeyword();
+    }
 }

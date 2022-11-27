@@ -76,7 +76,7 @@
   
   insert into consulting values("1", "counselor1", "client1", 1668847708518, 1668848008518, null), ("2", "counselor1", "client2", 1668847908518, 1668848208518, null), ("3", "counselor2", "client2", 1668847708518, 1668848908518, null) ;
   
-  insert into message values("1", "1",  "client", 1669302000, "angry", "주문하고 한시간 지났는데 안와요.", "주문"), ("2", "1", "counselor", 1669602000, "none", "배달 출발했습니다.", null), ("3", "1", "notice", 1669702000, "none", "지금부터 고객 음성이 차단됩니다.", null);
+  insert into message values("1", "1",  "client", 1669302000000, "angry", "주문하고 한시간 지났는데 안와요.", "주문"), ("2", "1", "counselor", 1669602000000, "none", "배달 출발했습니다.", null), ("3", "1", "notice", 1669702000000, "none", "지금부터 고객 음성이 차단됩니다.", null);
 
 ### properties
 * application-mariaDB.properties
@@ -155,11 +155,13 @@ ClientSecret = {client secret}
 
 * MainController
 
-| Method | URI             | Description              | input                                                                                            | output             |
-|--------|-----------------|--------------------------|--------------------------------------------------------------------------------------------------|--------------------|
-|POST| main/addText    | 상담 중 대화 저장               | {"roomId" : 1,"from" : "client" or "counselor", "time" : 1669302000,"encodeStr" : "encode .wav"} | none               |
-|GET| main/dialogue   | 상담 대화 기록 확인              | ?roomId= {consulting id} | List\<Message\>    |
-|GET| main/angerPoint | 고객이 화내기 시작한 부분의 대화 기록 확인 | ?roomId= {consulting id} | List\<AngerPoint\> |
+| Method | URI                     | Description              | input                                       | output             |
+|--------|-------------------------|--------------------------|---------------------------------------------|--------------------|
+|POST| main/addText            | 상담 중 대화 저장               | {"roomId" : 1,"from" : "client" or "counselor", "time" : 1669302000,"encodeStr" : "encode .wav"} | none               |
+|GET| main/dialogue           | 상담 대화 기록 확인              | ?roomId= {consulting id}                    | List\<Message\>    |
+|GET| main/angerPoint         | 고객이 화내기 시작한 부분의 대화 기록 확인 | ?roomId= {consulting id}                    | List\<AngerPoint\> |
+|GET| main/todayKeyword/happy | 오늘의 긍정 키워드 목록            | none                                        | List\<String\>     |
+|GET| main/todayKeyword/angry | 오늘의 부정 키워드 목록            | none                                        | List\<String\>     |
 
 
 ### WebSocket 
