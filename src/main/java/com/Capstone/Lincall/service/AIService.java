@@ -13,6 +13,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.File;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Locale;
@@ -27,8 +28,7 @@ public class AIService {
         ResourceBundle rb = ResourceBundle.getBundle("flaskServer", Locale.KOREA);
         String baseUrl = rb.getString("flaskURL");
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-32")));
-        String questionResponse = restTemplate.getForObject(baseUrl + "/keyword?sentence="+ "주문하고 한시간 지났는데 안와요.  ", String.class);
-        System.out.println(questionResponse);
+        String questionResponse = restTemplate.getForObject(baseUrl + "/wordcloud?sentence="+ "주문하고 한시간 지났는데 안와요.  ", String.class);
         return questionResponse;
     }
 

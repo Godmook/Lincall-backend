@@ -81,6 +81,17 @@ public class ConsultingController {
         return webSocketMessageController.roomList.size();
     }
 
+    @GetMapping("/wordcloud/happy")
+    @ResponseBody
+    public String getHappyWordCloudByConsultingID(String id){
+        return consultingService.getHappyWordcloud(id);
+    }
+
+    @GetMapping("/wordcloud/angry")
+    @ResponseBody
+    public String getAngryWordCloudByConsultingID(String id){
+        return consultingService.getAngryWordcloud(id);
+    }
 
 
 }

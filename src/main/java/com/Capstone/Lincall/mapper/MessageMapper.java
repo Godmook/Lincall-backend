@@ -32,4 +32,10 @@ public interface MessageMapper {
 
     @Select("SELECT GROUP_CONCAT(text)  FROM message WHERE date_format(from_unixtime(time/1000), '%Y-%c-%e') = date_format(now(), '%Y-%c-%e') AND emotion = 'angry';")
     public String getTodayAngryMessage();
+
+    @Select("SELECT GROUP_CONCAT(text)  FROM message WHERE roomId = #{roomId} AND emotion = 'happy';")
+    public String getHappyTextByRoomId(String roomId);
+
+    @Select("SELECT GROUP_CONCAT(text)  FROM message WHERE roomId = #{roomId} AND emotion = 'angry';")
+    public String getAngryTextByRoomId(String roomId);
 }

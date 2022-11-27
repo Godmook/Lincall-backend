@@ -4,26 +4,33 @@ import com.Capstone.Lincall.domain.Consulting;
 import com.Capstone.Lincall.domain.ConsultingView;
 import com.Capstone.Lincall.domain.User;
 import com.Capstone.Lincall.mapper.ConsultingMapper;
+import com.Capstone.Lincall.mapper.MessageMapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ConsultingService {
     UserService userService;
     ConsultingMapper consultingMapper;
 
-    public ConsultingService(ConsultingMapper consultingMapper, UserService userService){
+    MessageMapper messageMapper;
+
+    private String baseUrl;
+
+    public ConsultingService(ConsultingMapper consultingMapper, UserService userService, MessageMapper messageMapper){
         this.consultingMapper = consultingMapper;
         this.userService = userService;
+        this.messageMapper = messageMapper;
+        ResourceBundle rb = ResourceBundle.getBundle("flaskServer", Locale.KOREA);
+        baseUrl = rb.getString("flaskURL");
     }
 
     public int createConsulting(String counselor, String client){
@@ -105,8 +112,7 @@ public class ConsultingService {
         return obj.toString();
     }
 
-    public String getCounselorInfoToday(String id)
-    {
+    public String getCounselorInfoToday(String id) {
         JSONObject obj = new JSONObject();
 
         int count = consultingMapper.getCountOfConsultingToday(id);
@@ -117,4 +123,17 @@ public class ConsultingService {
 
         return obj.toString();
     }
+
+    public String getHappyWordcloud(String id){
+        String messageStr = messageMapper.getHappyTextByRoomId(id);
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(baseUrl + "/wordcloud?sentence="+messageStr, String.class);
+    }
+
+    public String getAngryWordcloud(String id){
+        String messageStr = messageMapper.getAngryTextByRoomId(id);
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(baseUrl + "/wordcloud?sentence="+messageStr, String.class);
+    }
+
 }

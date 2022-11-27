@@ -149,16 +149,18 @@ flaskURL = {flask server ip address}
 
 * ConsultingController
 
-| Method | URI                             | Description | input                  | output                               |
-|--------|---------------------------------|------------|------------------------|--------------------------------------|
-| GET    | consulting/create               | 새로운 상담 생성  | none                   | int (consulting id)                  |
-| GET    | consulting/end                  | 상담 종료 시간 업데이트 | ?id={consultingID}     | none                                 |
-| GET    | consulting/records/client       | 고객 상담 기록   | ?clientID = {clientID} | List\<ConsultingView\>               |
-| GET    | consulting/records/counselor    | 고객 상담 기록   | ?id = {counselorID}    | List\<ConsultingView\>               |
-|GET| consulting/room-list            | 현재 상담방 리스트 | none                   | List\<Room\>                         |
-|GET| consulting/counselorInfo        | 상담사 상담 정보(이번달, 오늘 총 상담 시간) | ?id={counselorID}      | String({"month" : 00, "today" : 00}) |
+| Method | URI                             | Description                   | input                  | output                               |
+|--------|---------------------------------|-------------------------------|------------------------|--------------------------------------|
+| GET    | consulting/create               | 새로운 상담 생성                     | none                   | int (consulting id)                  |
+| GET    | consulting/end                  | 상담 종료 시간 업데이트                 | ?id={consultingID}     | none                                 |
+| GET    | consulting/records/client       | 고객 상담 기록                      | ?clientID = {clientID} | List\<ConsultingView\>               |
+| GET    | consulting/records/counselor    | 고객 상담 기록                      | ?id = {counselorID}    | List\<ConsultingView\>               |
+|GET| consulting/room-list            | 현재 상담방 리스트                    | none                   | List\<Room\>                         |
+|GET| consulting/counselorInfo        | 상담사 상담 정보(이번달, 오늘 총 상담 시간)    | ?id={counselorID}      | String({"month" : 00, "today" : 00}) |
 |GET| consulting//counselorInfo/today | 상담사 상담 정보(오늘 상담 건수, 오늘 상담 시간) | ?id={counselorID}      | String({"count":12,"time":3960000})  |
-|GET| consulting/waitClient           | 현재 대기 중인 고객 수 | none                   | int                                  |
+|GET| consulting/waitClient           | 현재 대기 중인 고객 수                 | none                   | int                                  |
+|GET| consulting/wordcloud/happy      | 상담 별 긍정 워드 클라우드 이미지           | ?id={consulting id}    | String(워드 클라우드 바이너리 문자열)      |
+|GET| consulting/wordcloud/angry      | 상담 별 부정 워드 클라우드 이미지           | ?id={consulting id}    | String(워드 클라우드 바이너리 문자열)      |
 
 
 * MainController
