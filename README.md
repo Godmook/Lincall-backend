@@ -107,6 +107,14 @@ ClientID = {client id}
 ClientSecret = {client secret}
 ```
 
+* flaskServer.properties
+
+```properties
+flaskURL = {flask server ip address}
+```
+
+
+
 ### File Directory
 
 * 상담사 프로필 사진 저장 : ../image/profile/{userID}.png

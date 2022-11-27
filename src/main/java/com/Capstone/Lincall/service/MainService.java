@@ -85,8 +85,9 @@ public class MainService {
 
 
         // 질문 추천  : flask 미구현
-        String question = null; //recommended.question;
-        String answer = null; //recommended.answer;
+        String[] questionResponse = restTemplate.getForObject(baseUrl + "/question?sentence="+ message, String.class).split("|");
+        String question = questionResponse[0];
+        String answer = questionResponse[1];
 
         // fron 전달 객체
         JSONObject nText = new JSONObject();
@@ -103,20 +104,23 @@ public class MainService {
 
 
         // client인 경우만 확인
-
-        String keyword = null;
+        JSONArray keywordArr = null;
+        String[] keyword = null;
         boolean isStartingPoint = false;
         if(userType.equals("client")){
             // keyword (감정 변화가 생긴 경우)
             String pastEmotion = messageMapper.getLastEmotion(roomId, userType);
             if(pastEmotion == null || pastEmotion != "angry"){
                 isStartingPoint = true;
-                keyword =  null;
+                keyword = restTemplate.getForObject(baseUrl + "/keyword?sentence="+ message, String.class).split(" ");
+                keywordArr = new JSONArray();
+                for(String s : keyword)
+                    keywordArr.put(s);
             }
         }
 
         // db update
-        messageMapper.insertMessage(roomId, userType, time, emotion, message, keyword);
+        messageMapper.insertMessage(roomId, userType, time, emotion, message, (keywordArr == null)? null :keywordArr.toString());
 
         // anger starting point 업데이트 알림
         if(isStartingPoint)
@@ -139,27 +143,21 @@ public class MainService {
     public List<String> getTodayHappyKeyword(){
         String todayHappyStr = messageMapper.getTodayHappyMessage();
 
-        /* flask - 미구현
         String url = baseUrl+"/keyword?sentence="+todayHappyStr;
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
-        return List.of(response.split(","));
-        */
-
-        return List.of("맛", "패스트푸드", "가격");
+        if(response == null) return null;
+        return List.of(response.split(" "));
     }
 
     public List<String> getTodayAngryKeyword(){
         String todayAngryStr = messageMapper.getTodayAngryMessage();
 
-        /* flask - 미구현
         String url = baseUrl+"/keyword?sentence="+todayAngryStr;
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
-        return List.of(response.split(","));
-        */
-
-        return List.of("배달", "이물질", "환불", "주문 취소");
+        if(response == null) return null;
+        return List.of(response.split(" "));
     }
 
 

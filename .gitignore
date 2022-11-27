@@ -21,6 +21,7 @@ bin/
 application-mariaDB.properties
 application-email.properties
 vito.properties
+flaskServer.properties
 
 .idea
 *.iws
