@@ -38,11 +38,6 @@ public class ConsultingController {
 
     }
 
-    @GetMapping("/end")
-    @ResponseBody
-    public void endConsulting(String id){
-        consultingService.endConsulting(id);
-    }
 
     @GetMapping("/records/client")
     @ResponseBody

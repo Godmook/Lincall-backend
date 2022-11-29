@@ -76,6 +76,15 @@ public class WebSocketMessageController {
         simpMessageSendingOperations.convertAndSend("/sub/room/" + message.getChannelId(), message);
     }
 
+    @MessageMapping("/end")
+    public void endConnection(WebSocketMessage message){
+        // 상담 종료 시간 업데이트
+        consultingService.endConsulting(String.valueOf(message.getChannelId()));
+
+        // roomId 채널을 구독 중인 사람에게 전달
+        simpMessageSendingOperations.convertAndSend("/sub/room/" + message.getChannelId(), "consulting end");
+    }
+
     @MessageMapping("/quit")
     public void quit(WebSocketMessage message){
         Room r = findRoomById(message.getChannelId());

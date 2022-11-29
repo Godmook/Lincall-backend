@@ -152,9 +152,8 @@ flaskURL = {flask server ip address}
 | Method | URI                             | Description                   | input                  | output                               |
 |--------|---------------------------------|-------------------------------|------------------------|--------------------------------------|
 | GET    | consulting/create               | 새로운 상담 생성                     | none                   | int (consulting id)                  |
-| GET    | consulting/end                  | 상담 종료 시간 업데이트                 | ?id={consultingID}     | none                                 |
 | GET    | consulting/records/client       | 고객 상담 기록                      | ?clientID = {clientID} | List\<ConsultingView\>               |
-| GET    | consulting/records/counselor    | 고객 상담 기록                      | ?id = {counselorID}    | List\<ConsultingView\>               |
+| GET    | consulting/records/counselor    | 상담원 상담 기록                     | ?id = {counselorID}    | List\<ConsultingView\>               |
 |GET| consulting/room-list            | 현재 상담방 리스트                    | none                   | List\<Room\>                         |
 |GET| consulting/counselorInfo        | 상담사 상담 정보(이번달, 오늘 총 상담 시간)    | ?id={counselorID}      | String({"month" : 00, "today" : 00}) |
 |GET| consulting//counselorInfo/today | 상담사 상담 정보(오늘 상담 건수, 오늘 상담 시간) | ?id={counselorID}      | String({"count":12,"time":3960000})  |
@@ -170,8 +169,8 @@ flaskURL = {flask server ip address}
 |POST| main/addText            | 상담 중 대화 저장               | {"roomId" : 1,"from" : "client" or "counselor", "time" : 1669302000,"encodeStr" : "encode .wav"} | none               |
 |GET| main/dialogue           | 상담 대화 기록 확인              | ?roomId= {consulting id}                    | List\<Message\>    |
 |GET| main/angerPoint         | 고객이 화내기 시작한 부분의 대화 기록 확인 | ?roomId= {consulting id}                    | List\<AngerPoint\> |
-|GET| main/todayKeyword/happy | 오늘의 긍정 키워드 목록            | none                                        | List\<String\>     |
-|GET| main/todayKeyword/angry | 오늘의 부정 키워드 목록            | none                                        | List\<String\>     |
+|GET| main/todayKeyword/happy | 오늘의 긍정 워드 클라우드           | none                                        | String             |
+|GET| main/todayKeyword/angry | 오늘의 부정 워드 클라우드           | none                                        | String             |
 
 
 ### WebSocket 
@@ -184,12 +183,13 @@ flaskURL = {flask server ip address}
 
 * WebSocketMessageController
 
-| Destination Queue | Description | Message                                               | send             |
-|-------------------|-------------|-------------------------------------------------------|------------------|
-| /pub/join         | 상담방 입장      | WebsocketMessage (type = "client" or "counselor")     | "{sender} join"  |
-| /pub/data         | 데이터 전송      | WebsocketMessage (type = "offer" or "answer" or "ice") | WebsocketMessage |
-| /pub/sucess       | 상담 시작       | WebsocketMessage (type = "client" or "counselor") | WebsocketMessage |
-| /pub/quit         | 상담방 나가기     | WebsocketMessage (type = "client" or "counselor") | "{sender} quit"  |
+| Destination Queue | Description  | Message                                               | send             |
+|-------------------|--------------|-------------------------------------------------------|------------------|
+| /pub/join         | 상담방 입장       | WebsocketMessage (type = "client" or "counselor")     | "{sender} join"  |
+| /pub/data         | 데이터 전송       | WebsocketMessage (type = "offer" or "answer" or "ice") | WebsocketMessage |
+| /pub/sucess       | 상담 시작        | WebsocketMessage (type = "client" or "counselor") | WebsocketMessage |
+| /pub/end          | 상담 종료        | WebsocketMessage (type = "client" or "counselor") | "consulting end" |
+| /pub/quit         | 상담사 매칭 전 나가기 | WebsocketMessage (type = "client" or "counselor") | "{sender} quit"  |
 
 
 * Websocket message

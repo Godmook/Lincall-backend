@@ -34,8 +34,8 @@ public class MainController {
 
     @GetMapping("/dialogue")
     @ResponseBody
-    public void getDialogue(int roomId){
-        mainService.getDialogue(roomId);
+    public List<Message> getDialogue(int roomId){
+        return mainService.getDialogue(roomId);
     }
 
     @GetMapping("/angerPoint")
@@ -46,13 +46,13 @@ public class MainController {
 
     @GetMapping("/todayKeyword/happy")
     @ResponseBody
-    public List<String> getTodayHappyKeyword(){
+    public String getTodayHappyKeyword(){
         return mainService.getTodayHappyKeyword();
     }
 
     @GetMapping("/todayKeyword/angry")
     @ResponseBody
-    public List<String> getTodayAngryKeyword(){
+    public String getTodayAngryKeyword(){
         return mainService.getTodayAngryKeyword();
     }
 }

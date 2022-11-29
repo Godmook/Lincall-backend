@@ -29,7 +29,7 @@ public interface ConsultingMapper {
     @Select("SELECT IFNULL(SUM(end-start), 0) AS time FROM consulting WHERE counselor = #{counselor} AND date_format(from_unixtime(start/1000), '%Y-%c') = date_format(now(), '%Y-%c');")
     int getSumOfConsultingTimeMonth(String counselor);
 
-    @Select("SELECT IFNULL(SUM(end-start), 0) AS time FROM consulting WHERE counselor = 'counselor1' AND date_format(from_unixtime(start/1000), '%Y-%c-%e') = date_format(now(), '%Y-%c-%e');")
+    @Select("SELECT IFNULL(SUM(end-start), 0) AS time FROM consulting WHERE counselor = #{counselor} AND date_format(from_unixtime(start/1000), '%Y-%c-%e') = date_format(now(), '%Y-%c-%e');")
     int getSumOfConsultingTimeDay(String counselor);
 
     @Select("SELECT COUNT(*) AS count FROM consulting WHERE counselor = #{id} AND date_format(from_unixtime(start/1000), '%Y-%c-%e') = date_format(now(), '%Y-%c-%e');")

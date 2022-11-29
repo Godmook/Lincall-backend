@@ -5,10 +5,12 @@ import com.Capstone.Lincall.domain.ConsultingView;
 import com.Capstone.Lincall.domain.User;
 import com.Capstone.Lincall.mapper.ConsultingMapper;
 import com.Capstone.Lincall.mapper.MessageMapper;
+import com.Capstone.Lincall.socket.WebSocketMessageController;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,17 +20,15 @@ import java.util.*;
 
 @Service
 public class ConsultingService {
-    UserService userService;
-    ConsultingMapper consultingMapper;
+    @Autowired UserService userService;
+    @Autowired ConsultingMapper consultingMapper;
 
-    MessageMapper messageMapper;
+    @Autowired MessageMapper messageMapper;
+
 
     private String baseUrl;
 
-    public ConsultingService(ConsultingMapper consultingMapper, UserService userService, MessageMapper messageMapper){
-        this.consultingMapper = consultingMapper;
-        this.userService = userService;
-        this.messageMapper = messageMapper;
+    public ConsultingService(){
         ResourceBundle rb = ResourceBundle.getBundle("flaskServer", Locale.KOREA);
         baseUrl = rb.getString("flaskURL");
     }
@@ -127,13 +127,13 @@ public class ConsultingService {
     public String getHappyWordcloud(String id){
         String messageStr = messageMapper.getHappyTextByRoomId(id);
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(baseUrl + "/wordcloud?sentence="+messageStr, String.class);
+        return restTemplate.getForObject(baseUrl + "/wordcloud?sentence="+messageStr+"&theme=tab20c", String.class);
     }
 
     public String getAngryWordcloud(String id){
         String messageStr = messageMapper.getAngryTextByRoomId(id);
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(baseUrl + "/wordcloud?sentence="+messageStr, String.class);
+        return restTemplate.getForObject(baseUrl + "/wordcloud?sentence="+messageStr+"&theme=tab20c", String.class);
     }
 
 }

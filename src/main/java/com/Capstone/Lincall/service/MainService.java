@@ -78,16 +78,22 @@ public class MainService {
         // emotion
         Double emotionDouble = Double.parseDouble(restTemplate.getForObject(baseUrl + "/sentiment?sentence="+message, String.class));
         String emotion = "none";
-        if( emotionDouble< 0.3)
+        if( emotionDouble< 0.1)
             emotion = "angry";
-        else if(emotionDouble > 0.7)
+        else if(emotionDouble > 0.5)
                 emotion = "happy";
 
 
         // 질문 추천  : flask 미구현
-        String[] questionResponse = restTemplate.getForObject(baseUrl + "/question?sentence="+ message, String.class).split("|");
-        String question = questionResponse[0];
-        String answer = questionResponse[1];
+        String questionResponse = restTemplate.getForObject(baseUrl + "/question?sentence="+ message, String.class);
+        String question = null;
+        String answer = null;
+        if(questionResponse != null){
+            String[] questionAndAnwer = questionResponse.split("\\|");
+            question = questionAndAnwer[0];
+            answer = questionAndAnwer[1];
+        }
+
 
         // fron 전달 객체
         JSONObject nText = new JSONObject();
@@ -110,7 +116,7 @@ public class MainService {
         if(userType.equals("client")){
             // keyword (감정 변화가 생긴 경우)
             String pastEmotion = messageMapper.getLastEmotion(roomId, userType);
-            if(pastEmotion == null || pastEmotion != "angry"){
+            if(emotion.equals("angry") && (pastEmotion == null || pastEmotion != "angry")){
                 isStartingPoint = true;
                 keyword = restTemplate.getForObject(baseUrl + "/keyword?sentence="+ message, String.class).split(" ");
                 keywordArr = new JSONArray();
@@ -126,10 +132,12 @@ public class MainService {
         if(isStartingPoint)
             websocket.sendMessage(roomId, "reload anger starting point");
 
-        // 음성 차단 활성화 여부 확인
-        int angerCnt = messageMapper.getAngerCnt(roomId);
-        if(angerCnt == 4) // 음성 차단 기준 = 4회
-            websocket.sendMessage(roomId, "activate voice blocking");
+        if(userType.equals("client") && emotion.equals("angry")){
+            // 음성 차단 활성화 여부 확인
+            int angerCnt = messageMapper.getAngerCnt(roomId);
+            if(angerCnt == 4) // 음성 차단 기준 = 4회
+                websocket.sendMessage(roomId, "activate voice blocking");
+        }
     }
 
     public List<Message> getDialogue(int roomId) {
@@ -140,24 +148,16 @@ public class MainService {
         return messageMapper.getAngerStartMessage(roomId);
     }
 
-    public List<String> getTodayHappyKeyword(){
+    public String getTodayHappyKeyword(){
         String todayHappyStr = messageMapper.getTodayHappyMessage();
-
-        String url = baseUrl+"/keyword?sentence="+todayHappyStr;
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(url, String.class);
-        if(response == null) return null;
-        return List.of(response.split(" "));
+        return restTemplate.getForObject(baseUrl + "/wordcloud?sentence="+todayHappyStr+"&theme=dark", String.class);
     }
 
-    public List<String> getTodayAngryKeyword(){
+    public String getTodayAngryKeyword(){
         String todayAngryStr = messageMapper.getTodayAngryMessage();
-
-        String url = baseUrl+"/keyword?sentence="+todayAngryStr;
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(url, String.class);
-        if(response == null) return null;
-        return List.of(response.split(" "));
+        return restTemplate.getForObject(baseUrl + "/wordcloud?sentence="+todayAngryStr+"&theme=dark", String.class);
     }
 
 
